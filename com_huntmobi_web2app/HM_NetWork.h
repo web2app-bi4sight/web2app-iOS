@@ -24,7 +24,6 @@ typedef void(^HSResponseFailBlock)(NSError *error);
 
 /**
  * @brief   JSON格式网络接口请求方法
- * @author  yuancan
  *
  * @param relativePath 接口名称
  * @param params 请求参数

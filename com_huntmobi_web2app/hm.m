@@ -85,7 +85,6 @@ static W2ABlock w2aBlock;
 
 + (void)getWebViewInfo: (NSString *) AppName {
     [[GetWebViewInfo shared] creatWebView:^(NSString * _Nonnull string) {
-//        NSLog(@"callBack: %@", string);
         [hm reuqestRegisterInfo:AppName];
     }];
 }
@@ -963,6 +962,40 @@ static W2ABlock w2aBlock;
     }
     [userDefaults setObject:deviceId forKey:@"__hm_uuid__"];
     [userDefaults synchronize];
+}
+
+
+
++(void) sdkLog {
+    NSUserDefaults *userDefaults =[NSUserDefaults standardUserDefaults];
+    NSString *Gateway = [userDefaults objectForKey:@"HM_Gateway"];
+    NSString *url = [NSString stringWithFormat:@"%@/sdklog", Gateway];
+    NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithDictionary:@{}];
+    NSString *AppName = [userDefaults objectForKey:@"HM_App_Name"];
+    [dic setObject:AppName forKey:@"app_name"];
+    NSString *jsonString = [userDefaults objectForKey:@"HM_WebView_Fingerprint"];
+    if (jsonString.length > 0) {
+        NSDictionary *d = [[HM_Config sharedManager] dictionaryWithJsonString:jsonString];
+        [dic setObject:[d objectForKey:@"ca"] forKey:@"ca"];
+        [dic setObject:[d objectForKey:@"wg"] forKey:@"wg"];
+        [dic setObject:[d objectForKey:@"pi"] forKey:@"pi"];
+        [dic setObject:[d objectForKey:@"ao"] forKey:@"ao"];
+        [dic setObject:[d objectForKey:@"se"] forKey:@"se"];
+        [dic setObject:[d objectForKey:@"ft"] forKey:@"ft"];
+        [dic setObject:[d objectForKey:@"ua"] forKey:@"ua"];
+    }
+    NSDictionary *d = @{
+                          @"fingerprint_data" : dic
+                        };
+    [[HM_NetWork shareInstance] requestJsonPost:url params:d successBlock:^(NSDictionary * _Nonnull responseObject) {
+        NSString *code = [responseObject[@"code"] stringValue];
+        if ([code isEqual: @"0"]) {
+            NSString *msg = responseObject[@"msg"];
+            NSLog(@"%@", msg);
+        } else {
+        }
+    } failBlock:^(NSError * _Nonnull error) {
+    }];
 }
 
 @end

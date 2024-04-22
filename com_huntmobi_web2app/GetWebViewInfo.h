@@ -17,11 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)shared;
 
--(void)creatWebView ;
-
 -(void) creatWebView: (void(^)(NSString * string))block ;
 
--(void) removeWeb;
+//-(void) removeWeb;
 
 -(void) useFingerPrinting:(BOOL) isEnable;
 

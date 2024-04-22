@@ -8,6 +8,30 @@
 #import "HM_NetWork.h"
 #import "HM_Config.h"
 
+#ifdef DEBUG
+#define HMLog(format, ...) \
+do { \
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init]; \
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]; \
+    NSDate *currentTime = [NSDate date]; \
+    NSString *formattedTime = [dateFormatter stringFromDate:currentTime]; \
+    NSString *message = [NSString stringWithFormat:(format), ##__VA_ARGS__]; \
+    NSLog(@"\n[%@] %@\n", formattedTime, message); \
+} while(0)
+#else
+#define HMLog(format, ...)
+#endif
+
+#ifdef DEBUG
+#define HMAllLog(message, ...) \
+do { \
+    NSString *fileName = [[NSString stringWithUTF8String:__FILE__] lastPathComponent]; \
+    NSLog(@"\n********** HMAllLog-satrt ***********\n\n文件名称:%@\n方法名称:%s\n行数:%d\n信息:\n\n%@\n\n********** HMAllLog-end ***********\n", fileName, __FUNCTION__, __LINE__, message); \
+} while(0)
+#else
+#define HMAllLog(message, ...)
+#endif
+
 @implementation HM_NetWork
 
 + (instancetype)shareInstance
@@ -64,7 +88,7 @@
                 if (self.isEnableLog) {
                     NSString *jsonStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     if (jsonData.length > 0) {
-                        NSLog(@"**************\n hm_event log \n\nurl:%@\n\nrequestHeaders:\n%@\n\nrequestBody:\n%@\n\nresponse:\n%@\n**************\n", relativePath, headerString, strJson, jsonStr);
+                        HMLog(@"\n**************\n hm_event log \n\nurl:%@\n\n%@\nRequestBody:\n%@\n\nResponse:\n%@\n**************\n\n ", relativePath, headerString, strJson, jsonStr);
                     }
                 }
                 if ([responseObject isKindOfClass:[NSDictionary class]]) {
@@ -74,7 +98,7 @@
         } else {
             if (failBlock) {
                 if (error) {
-                    NSLog(@"**************\n hm_event log\n\nurl:%@\n\nrequestHeaders:\n%@\n\nrequestBody:\n%@\n\nerror:\n%@\n \n**************\n", relativePath, headerString, strJson, error);
+                    HMLog(@"**************\n hm_event log\n\nurl:%@\n\nrequestHeaders:\n%@\n\nrequestBody:\n%@\n\nerror:\n%@\n \n**************\n", relativePath, headerString, strJson, error);
                     failBlock(error);
                 }
             }

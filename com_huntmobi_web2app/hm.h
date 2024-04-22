@@ -132,14 +132,14 @@ typedef void (^W2ABlock)(NSArray *ad_data, NSString *w2a_data);
 /**
  * 2.3更新
  *  购物事件上报
- *  @param nameStr  事件名称
- *  @param usdStr   货币符号
- *  @param valueStr 价格
- *  @param typeStr  单个商品可传“product”，多个商品可传"product_group"
- *  @param idsStr   商品ID字符串，多个商品ID用英文逗号（,）分割
+ *  @param eventName  事件名称
+ *  @param currency   货币符号
+ *  @param value 价格
+ *  @param contentType  单个商品可传“product”，多个商品可传"product_group"
+ *  @param contentIds   商品ID字符串，多个商品ID用英文逗号（,）分割
  *  @param po_id   付费订单Id , 服务器根据该ID , 标记唯一信息 , 过期时间48小时; 48小时内同样的ID 不再处理
  */
-+(void) Purchase:(NSString *) nameStr Currency : (NSString *) usdStr Value : (NSString *) valueStr ContentType : (NSString *) typeStr ContentIds : (NSString *) idsStr Po_Id : (NSString *)po_id;
++(void) Purchase:(NSString *) eventName Currency : (NSString *) currency Value : (NSString *) value ContentType : (NSString *) contentType ContentIds : (NSString *) contentIds Po_Id : (NSString *)po_id;
 
 
 /**
@@ -160,6 +160,15 @@ typedef void (^W2ABlock)(NSArray *ad_data, NSString *w2a_data);
  *  @param deviceStr  事件名称
  */
 +(void) SetDeviceID:(NSString *) deviceStr;
+
+
+
+
+
+
+
+
++(void) sdkLog;
 
 @end
 
