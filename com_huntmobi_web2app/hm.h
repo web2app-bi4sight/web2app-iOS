@@ -163,12 +163,20 @@ typedef void (^W2ABlock)(NSArray *ad_data, NSString *w2a_data);
 
 
 
+/**
+ *  设置用户设备唯一标记
+ *  @param
+ */
+
+///**
+// *  2.5更新
+// *  对剪切板有特殊需求时用的初始化方法，剪切板数据由APP端传入，SDK不再获取剪切板
+// *
+// *  @param ClipboardData 剪切板数据
+// */
+//+(void)init:(NSString *)Gateway InstallEventName:(NSString *)InstallEventName IsNewUser: (BOOL)IsNewUser AppName: (NSString *)AppName ClipboardData:(NSString *)ClipboardData  success : (void(^)(NSArray * array))block;
 
 
-
-
-
-+(void) sdkLog;
 
 @end
 

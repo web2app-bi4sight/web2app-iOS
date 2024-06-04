@@ -824,7 +824,7 @@ static W2ABlock w2aBlock;
     if (IsAttribution) {
         block(IsAttribution, attribution_type, external_id, user_type);
     } else {// IsAttribution 为False 传入null
-        block(IsAttribution, NULL, external_id, user_type);
+        block(IsAttribution, @"", external_id, user_type);
     }
 }
 
@@ -965,37 +965,91 @@ static W2ABlock w2aBlock;
 }
 
 
-
-+(void) sdkLog {
-    NSUserDefaults *userDefaults =[NSUserDefaults standardUserDefaults];
-    NSString *Gateway = [userDefaults objectForKey:@"HM_Gateway"];
-    NSString *url = [NSString stringWithFormat:@"%@/sdklog", Gateway];
-    NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithDictionary:@{}];
-    NSString *AppName = [userDefaults objectForKey:@"HM_App_Name"];
-    [dic setObject:AppName forKey:@"app_name"];
-    NSString *jsonString = [userDefaults objectForKey:@"HM_WebView_Fingerprint"];
-    if (jsonString.length > 0) {
-        NSDictionary *d = [[HM_Config sharedManager] dictionaryWithJsonString:jsonString];
-        [dic setObject:[d objectForKey:@"ca"] forKey:@"ca"];
-        [dic setObject:[d objectForKey:@"wg"] forKey:@"wg"];
-        [dic setObject:[d objectForKey:@"pi"] forKey:@"pi"];
-        [dic setObject:[d objectForKey:@"ao"] forKey:@"ao"];
-        [dic setObject:[d objectForKey:@"se"] forKey:@"se"];
-        [dic setObject:[d objectForKey:@"ft"] forKey:@"ft"];
-        [dic setObject:[d objectForKey:@"ua"] forKey:@"ua"];
++ (void)init:(NSString *)Gateway InstallEventName:(NSString *)InstallEventName IsNewUser:(BOOL)IsNewUser AppName:(NSString *)AppName ClipboardData:(NSString *)ClipboardData success : (void(^)(NSArray * array))successBlock {
+    if (Gateway.length < 1) {
+        successBlock(NULL); //网关为空，直接给null (空对象)
+        return;
     }
-    NSDictionary *d = @{
-                          @"fingerprint_data" : dic
-                        };
-    [[HM_NetWork shareInstance] requestJsonPost:url params:d successBlock:^(NSDictionary * _Nonnull responseObject) {
-        NSString *code = [responseObject[@"code"] stringValue];
-        if ([code isEqual: @"0"]) {
-            NSString *msg = responseObject[@"msg"];
-            NSLog(@"%@", msg);
-        } else {
+    [[HM_Config sharedManager] saveDeviceID];
+    [[HM_Config sharedManager] saveBaseInfo];
+
+    NSUserDefaults *userDefaults =[NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:@[] forKey:@"HM_Adv_Data"];
+    [userDefaults setObject:AppName forKey:@"HM_App_Name"];
+
+//    [userDefaults setObject:Gateway.length > 0 ? Gateway : @"https://capi.bi4sight.com" forKey:@"HM_Gateway"];// 一个基于Https://开头加上域名构成的网关URL，不包含结尾的 /
+    [userDefaults setObject:Gateway forKey:@"HM_Gateway"];// 一个基于Https://开头加上域名构成的网关URL，不包含结尾的 /
+    [userDefaults setObject:InstallEventName.length > 0 ? InstallEventName : @"CompleteRegistration" forKey:@"HM_InstallEventName"];// 完成注册的事件名称，如果不传默认为：CompleteRegistration
+    NSString *isFirst = [userDefaults objectForKey:@"HM_isFirstInsert"];
+    if (!IsNewUser) { //  不是第一次安装
+        NSString *HM_W2a_Data = [userDefaults objectForKey:@"HM_W2a_Data"];
+        if (HM_W2a_Data.length > 0) { // 是web2App用户
+            [hm reuqestOnattibute:AppName success:^{
+                [hm updataInfo];
+                [hm requestErrorPurchaseEvent];
+                [hm requestErrorEventPost];
+                successBlock([hm AdvDataRead]);
+            }];
+        } else { // 不是则回调空对象
+//            successBlock(NULL); //非w2a 用户,直接给null (空对象)
+            [hm reuqestOnattibute:AppName success:^{
+                successBlock([hm AdvDataRead]);
+            }];
         }
-    } failBlock:^(NSError * _Nonnull error) {
-    }];
+    } else { // 判断 第一次安装
+        if ([isFirst isEqual: @"0"]) {
+            NSString *HM_W2a_Data = [userDefaults objectForKey:@"HM_W2a_Data"];
+            if (HM_W2a_Data.length > 0) { // 是web2App用户
+                [hm reuqestOnattibute:AppName success:^{
+                    [hm updataInfo];
+                    [hm requestErrorPurchaseEvent];
+                    [hm requestErrorEventPost];
+                    successBlock([hm AdvDataRead]);
+                }];
+            } else { // 不是则回调空对象
+//                successBlock(NULL); //非w2a 用户,直接给null (空对象)
+                [hm reuqestOnattibute:AppName success:^{
+                    successBlock([hm AdvDataRead]);
+                }];
+            }
+        } else {
+            [userDefaults setObject:@"0" forKey:@"HM_isFirstInsert"];
+            BOOL isNeedRequest = true;
+            if (ClipboardData.length > 0) { //
+                NSString *preStr = @"w2a_data:";
+                BOOL result = [ClipboardData hasPrefix:preStr];
+                if (result) {// 剪切板有包含w2a_data:开头的数据
+                    [userDefaults setObject:ClipboardData forKey:@"HM_W2a_Data"];
+                    [userDefaults setObject:@"cut" forKey:@"HM_Attribution_Type"];
+                    [userDefaults setBool:true forKey:@"HM_IsAttribution"];
+                    [userDefaults setObject:@"0" forKey:@"HM_User_Type"];
+                    // 调用网关【新装API】，并将获取到的adv_data[]写入本地
+                    isNeedRequest = false;
+                    [hm requestNewUser:^(NSArray *array) {
+                        successBlock(array);
+                    }];
+                } else { // 无符合条件数据
+                    isNeedRequest = false;
+                    [userDefaults setObject:@"2" forKey:@"HM_User_Type"];
+                    [hm getWebViewInfo : AppName success:^(NSArray *array) {
+                        successBlock(array);
+                    }];
+                }
+            } else {
+                isNeedRequest = false;
+                [userDefaults setObject:@"2" forKey:@"HM_User_Type"];
+                [hm getWebViewInfo : AppName success:^(NSArray *array) {
+                    successBlock(array);
+                }];
+            }
+            if (isNeedRequest) {
+                [hm getWebViewInfo : AppName success:^(NSArray *array) {
+                    successBlock(array);
+                }];
+            }
+        }
+    }
+    [userDefaults synchronize];
 }
 
 @end
