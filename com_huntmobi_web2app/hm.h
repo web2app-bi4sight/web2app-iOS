@@ -16,7 +16,7 @@ typedef void (^W2ABlock)(NSArray *ad_data, NSString *w2a_data);
 /**
  *是否开启WebView指纹，需要在hm.init前设置，默认为true
  */
-+(void) useFingerPrinting:(BOOL) isEnable;
++(void) useFingerPrinting:(BOOL) isEnable DEPRECATED_MSG_ATTRIBUTE("2.4.8版本开始废弃，不需要设置");
 
 /**
  *  初始化传入相应参数，app启动时调用
@@ -26,7 +26,7 @@ typedef void (^W2ABlock)(NSArray *ad_data, NSString *w2a_data);
  *  @param IsNewUser 是否是新用户，新用户传true
  *
  */
-+(void) init : (NSString *) Gateway InstallEventName : (NSString *)InstallEventName IsNewUser: (BOOL)IsNewUser AppName: (NSString *)AppName;
++(void) init : (NSString *) Gateway InstallEventName : (NSString *)InstallEventName IsNewUser: (BOOL)IsNewUser AppName: (NSString *)AppName DEPRECATED_MSG_ATTRIBUTE("推荐使用+(void)init:(NSString *)Gateway InstallEventName:(NSString *)InstallEventName IsNewUser: (BOOL)IsNewUser AppName: (NSString *)AppName success : (void(^)(NSArray * array))block; 新初始化函数");
 
 /**
  *  初始化传入相应参数，app启动时调用 -- 扩展，回调Adv_Data数组
@@ -36,17 +36,17 @@ typedef void (^W2ABlock)(NSArray *ad_data, NSString *w2a_data);
 +(void)init:(NSString *)Gateway InstallEventName:(NSString *)InstallEventName IsNewUser: (BOOL)IsNewUser AppName: (NSString *)AppName success : (void(^)(NSArray * array))block;
 
 /**
- *  购物事件上报
+ *  购物事件上报1.0
  *  @param nameStr  事件名称
  *  @param usdStr   货币符号
  *  @param valueStr 价格
  *  @param typeStr  单个商品可传“product”，多个商品可传"product_group"
  *  @param idsStr   商品ID字符串，多个商品ID用英文逗号（,）分割
  */
-+(void) Purchase:(NSString *) nameStr Currency : (NSString *) usdStr Value : (NSString *) valueStr ContentType : (NSString *) typeStr ContentIds : (NSString *) idsStr;
++(void) Purchase:(NSString *) nameStr Currency : (NSString *) usdStr Value : (NSString *) valueStr ContentType : (NSString *) typeStr ContentIds : (NSString *) idsStr DEPRECATED_MSG_ATTRIBUTE("2.3及之后的版本不推荐使用，推荐使用2.3的方法");
 
 /**
- *  自定义事件上报
+ *  自定义事件上报1.0
  *
  *  @param nameStr  事件名称
  *  @param usdStr   货币符号
@@ -54,21 +54,21 @@ typedef void (^W2ABlock)(NSArray *ad_data, NSString *w2a_data);
  *  @param typeStr  单个商品可传“product”，多个商品可传"product_group"，可不传
  *  @param idsStr   商品ID字符串，多个商品ID用英文逗号（,）分割，可不传
  */
-+(void) EventPost:(NSString *) nameStr Currency : (NSString *) usdStr Value : (NSString *) valueStr ContentType : (NSString *) typeStr ContentIds : (NSString *) idsStr;
++(void) EventPost:(NSString *) nameStr Currency : (NSString *) usdStr Value : (NSString *) valueStr ContentType : (NSString *) typeStr ContentIds : (NSString *) idsStr DEPRECATED_MSG_ATTRIBUTE("2.4及之后的版本不推荐使用，推荐使用2.4的方法");
  
 /**
- *  修改用户信息
+ *  修改用户信息1.0
  *
  *  @param emStr  邮箱
  *  @param fbStr   Facebook
  *  @param idStr app用户ID
  *  @param phStr  电话号码
  */
-+(void) UserDataUpdateEvent:(NSString *) emStr Fb_login_id : (NSString *) fbStr UserId : (NSString *) idStr Phone : (NSString *) phStr success : (void(^)(void))block;
++(void) UserDataUpdateEvent:(NSString *) emStr Fb_login_id : (NSString *) fbStr UserId : (NSString *) idStr Phone : (NSString *) phStr success : (void(^)(void))block DEPRECATED_MSG_ATTRIBUTE("2.4及之后的版本不推荐使用");
 
 
 /**
- *  修改用户信息--拓展
+ *  修改用户信息2.0--拓展
  *
  *  @param emStr  邮箱
  *  @param fbStr   Facebook
@@ -83,10 +83,24 @@ typedef void (^W2ABlock)(NSArray *ad_data, NSString *w2a_data);
  *  @param dateBirthStr  出生年月 输入：2/16/1997 标准化格式：19970216 格式规则 YYYYMMDD
  *  @param countryStr  国家 请按照 ISO 3166-1 二位字母代码表示方式使用小写二位字母国家/地区代码。 输入：United States 准化格式：us
  */
-+ (void)UserDataUpdateEvent:(NSString *) emStr Fb_login_id : (NSString *) fbStr UserId : (NSString *) idStr Phone : (NSString *) phStr Zipcode : (NSString *) zipcodeStr City : (NSString *) cityStr State : (NSString *) stateStr Gender : (NSString *) genderStr Fn : (NSString *) fnStr Ln : (NSString *) lnStr DateBirth : (NSString *) dateBirthStr Country : (NSString *) countryStr success : (void(^)(void))block;
++ (void)UserDataUpdateEvent:(NSString *) emStr Fb_login_id : (NSString *) fbStr UserId : (NSString *) idStr Phone : (NSString *) phStr Zipcode : (NSString *) zipcodeStr City : (NSString *) cityStr State : (NSString *) stateStr Gender : (NSString *) genderStr Fn : (NSString *) fnStr Ln : (NSString *) lnStr DateBirth : (NSString *) dateBirthStr Country : (NSString *) countryStr success : (void(^)(void))block  DEPRECATED_MSG_ATTRIBUTE("2.4及之后的版本不推荐使用，推荐使用2.4的方法");
 
 
-// 2.4去掉UserID字段
+/**
+ *  修改用户信息2.4--去掉UserID字段
+ *
+ *  @param emStr  邮箱
+ *  @param fbStr   Facebook
+ *  @param phStr  电话号码
+ *  @param zipcodeStr  邮编 使用小写字母，且不可包含空格和破折号。美国邮编只限使用前 5 位数。英国邮编请使用邮域 + 邮区 + 邮政部门格式。
+ *  @param cityStr  城市 小写字母（移除所有空格） 推荐使用罗马字母字符 a 至 z。仅限小写字母，且不可包含标点符号、特殊字符和空格。若使用特殊字符，则须按 UTF-8 格式对文本进行编码。
+ *  @param stateStr  州或省 , 以两个小写字母表示的州或省代码 使用 2 个字符的 ANSI 缩写代码 必须为小写字母。请使用小写字母对美国境外的州/省/自治区/直辖市名称作标准化处理，且不可包含标点符号、特殊字符和空格。
+ *  @param genderStr  f 表示女性 m 表示男性
+ *  @param fnStr  名字 - 不包含姓氏 推荐使用罗马字母字符 a 至 z。仅限小写字母，且不可包含标点符号。若使用特殊字符，则须按 UTF-8 格式对文本进行编码。
+ *  @param lnStr  姓氏 - 不包含名字 推荐使用罗马字母字符 a 至 z。仅限小写字母，且不可包含标点符号。若使用特殊字符，则须按 UTF-8 格式对文本进行编码。
+ *  @param dateBirthStr  出生年月 输入：2/16/1997 标准化格式：19970216 格式规则 YYYYMMDD
+ *  @param countryStr  国家 请按照 ISO 3166-1 二位字母代码表示方式使用小写二位字母国家/地区代码。 输入：United States 准化格式：us
+ */
 + (void)UserDataUpdateEvent:(NSString *) emStr Fb_login_id : (NSString *) fbStr Phone : (NSString *) phStr Zipcode : (NSString *) zipcodeStr City : (NSString *) cityStr State : (NSString *) stateStr Gender : (NSString *) genderStr Fn : (NSString *) fnStr Ln : (NSString *) lnStr DateBirth : (NSString *) dateBirthStr Country : (NSString *) countryStr success : (void(^)(void))block;
 
 
@@ -161,20 +175,13 @@ typedef void (^W2ABlock)(NSArray *ad_data, NSString *w2a_data);
  */
 +(void) SetDeviceID:(NSString *) deviceStr;
 
-
-
 /**
- *  设置用户设备唯一标记
- *  @param
+ *  2.5更新
+ *  对剪切板有特殊需求时用的初始化方法，剪切板数据由APP端传入，SDK不再获取剪切板
+ *
+ *  @param ClipboardData 剪切板数据
  */
-
-///**
-// *  2.5更新
-// *  对剪切板有特殊需求时用的初始化方法，剪切板数据由APP端传入，SDK不再获取剪切板
-// *
-// *  @param ClipboardData 剪切板数据
-// */
-//+(void)init:(NSString *)Gateway InstallEventName:(NSString *)InstallEventName IsNewUser: (BOOL)IsNewUser AppName: (NSString *)AppName ClipboardData:(NSString *)ClipboardData  success : (void(^)(NSArray * array))block;
++(void)init:(NSString *)Gateway InstallEventName:(NSString *)InstallEventName IsNewUser: (BOOL)IsNewUser AppName: (NSString *)AppName ClipboardData:(NSString *)ClipboardData  success : (void(^)(NSArray * array))block  DEPRECATED_MSG_ATTRIBUTE("不推荐使用，如需使用联系HM技术支持确认");
 
 
 

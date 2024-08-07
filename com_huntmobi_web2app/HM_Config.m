@@ -22,6 +22,80 @@
     return config;
 }
 
+
+-(NSString *)getGUID{
+    NSUUID *uuid = [NSUUID UUID];
+    NSString *uuidString = [uuid UUIDString];
+    return uuidString;
+}
+
+- (BOOL) isNewUser {
+    NSDate *installDate = [self getInstallDate];
+    if (installDate) {
+        NSDate *now = [NSDate date];
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+        NSDateComponents *components = [calendar components:NSCalendarUnitDay fromDate:installDate toDate:now options:0];
+        NSInteger day = [components day];
+        if (day <= 1) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return true;
+    }
+}
+
+- (NSDate *)getInstallDate {
+    NSDate *installDate = [[NSUserDefaults standardUserDefaults] objectForKey:@"HM_INSTALLDATE"];
+    if (installDate) {
+        return installDate;
+    } else {
+        // 获取应用安装日期
+        installDate = [self getInstallationDateFromAttributes];
+        if (installDate) {
+            // 保存安装日期
+            [[NSUserDefaults standardUserDefaults] setObject:installDate forKey:@"HM_INSTALLDATE"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            return installDate;
+        }
+    }
+    return nil;
+}
+
+- (NSDate *)getInstallationDateFromAttributes {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray<NSURL *> *urls = [fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
+    if (urls.count > 0) {
+        NSURL *documentsDirectory = urls.lastObject;
+        NSError *error;
+        NSDictionary<NSFileAttributeKey, id> *attributes = [fileManager attributesOfItemAtPath:documentsDirectory.path error:&error];
+        if (attributes) {
+            NSDate *installDate = attributes[NSFileCreationDate];
+            if (installDate) {
+                return installDate;
+            }
+        } else {
+            NSLog(@"Error retrieving installation date: %@", error);
+        }
+    }
+    return nil;
+}
+
+- (NSDictionary *)getWebFingerprint {
+    NSUserDefaults *userDefaults =[NSUserDefaults standardUserDefaults];
+    NSString *ua = [userDefaults objectForKey:@"HM_WebView_UA"];
+    return @{
+        @"ca" : @"",
+        @"wg" : @"",
+        @"pi" : @"",
+        @"ao" : @"",
+        @"se" : @"",
+        @"ft" : @"",
+        @"ua": ua ?: @""
+    };
+}
+
 - (CGFloat)returnSDKVersion {
     return 2.4;
 }

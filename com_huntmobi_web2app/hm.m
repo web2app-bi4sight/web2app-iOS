@@ -8,7 +8,7 @@
 #import "hm.h"
 #import "HM_NetWork.h"
 #import "HM_Config.h"
-#import "GetWebViewInfo.h"
+#import "HM_WebView.h"
 
 @implementation hm
 
@@ -84,9 +84,15 @@ static W2ABlock w2aBlock;
 }
 
 + (void)getWebViewInfo: (NSString *) AppName {
-    [[GetWebViewInfo shared] creatWebView:^(NSString * _Nonnull string) {
-        [hm reuqestRegisterInfo:AppName];
-    }];
+//    [[GetWebViewInfo shared] creatWebView:^(NSString * _Nonnull string) {
+//        [hm reuqestRegisterInfo:AppName];
+//    }];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [[HM_WebView shared] HMWebBlock:^{
+            [hm reuqestRegisterInfo:AppName];
+        }];
+        [[HM_WebView shared] creatWebView];
+    });
 }
 
 //MARK: 调用网关 【落地页信息读取API】，判断是否是落地页用户
@@ -102,19 +108,9 @@ static W2ABlock w2aBlock;
         return;
     }
     NSString *url = [NSString stringWithFormat:@"%@/landingpageread", Gateway];
-    NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithDictionary:@{}];
+    NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithDictionary:[[HM_Config sharedManager] getWebFingerprint]];
     [dic setObject:AppName forKey:@"app_name"];
-    NSString *jsonString = [userDefaults objectForKey:@"HM_WebView_Fingerprint"];
-    if (jsonString.length > 0) {
-        NSDictionary *d = [[HM_Config sharedManager] dictionaryWithJsonString:jsonString];
-        [dic setObject:[d objectForKey:@"ca"] forKey:@"ca"];
-        [dic setObject:[d objectForKey:@"wg"] forKey:@"wg"];
-        [dic setObject:[d objectForKey:@"pi"] forKey:@"pi"];
-        [dic setObject:[d objectForKey:@"ao"] forKey:@"ao"];
-        [dic setObject:[d objectForKey:@"se"] forKey:@"se"];
-        [dic setObject:[d objectForKey:@"ft"] forKey:@"ft"];
-        [dic setObject:[d objectForKey:@"ua"] forKey:@"ua"];
-    }
+
     NSDictionary *device_info = [userDefaults objectForKey:@"HM_Device_Info"];
     [dic setObject:device_info forKey:@"device_info"];
     [[HM_NetWork shareInstance] requestJsonPost:url params:dic successBlock:^(NSDictionary * _Nonnull responseObject) {
@@ -686,11 +682,19 @@ static W2ABlock w2aBlock;
 }
 
 + (void)getWebViewInfo : (NSString *) AppName success : (void(^)(NSArray * array))block  {
-    [[GetWebViewInfo shared] creatWebView:^(NSString * _Nonnull string) {
-        [hm reuqestRegisterInfo : AppName success :^(NSArray *array) {
-            block(array);
+//    [[GetWebViewInfo shared] creatWebView:^(NSString * _Nonnull string) {
+//        [hm reuqestRegisterInfo : AppName success :^(NSArray *array) {
+//            block(array);
+//        }];
+//    }];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [[HM_WebView shared] HMWebBlock:^{
+            [hm reuqestRegisterInfo : AppName success :^(NSArray *array) {
+                block(array);
+            }];
         }];
-    }];
+        [[HM_WebView shared] creatWebView];
+    });
 }
 
 
@@ -707,19 +711,9 @@ static W2ABlock w2aBlock;
         return;
     }
     NSString *url = [NSString stringWithFormat:@"%@/landingpageread", Gateway];
-    NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithDictionary:@{}];
+    NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithDictionary:[[HM_Config sharedManager] getWebFingerprint]];
     [dic setObject:AppName forKey:@"app_name"];
-    NSString *jsonString = [userDefaults objectForKey:@"HM_WebView_Fingerprint"];
-    if (jsonString.length > 0) {
-        NSDictionary *d = [[HM_Config sharedManager] dictionaryWithJsonString:jsonString];
-        [dic setObject:[d objectForKey:@"ca"] forKey:@"ca"];
-        [dic setObject:[d objectForKey:@"wg"] forKey:@"wg"];
-        [dic setObject:[d objectForKey:@"pi"] forKey:@"pi"];
-        [dic setObject:[d objectForKey:@"ao"] forKey:@"ao"];
-        [dic setObject:[d objectForKey:@"se"] forKey:@"se"];
-        [dic setObject:[d objectForKey:@"ft"] forKey:@"ft"];
-        [dic setObject:[d objectForKey:@"ua"] forKey:@"ua"];
-    }
+
     NSDictionary *device_info = [userDefaults objectForKey:@"HM_Device_Info"];
     [dic setObject:device_info forKey:@"device_info"];
     
@@ -798,10 +792,6 @@ static W2ABlock w2aBlock;
 }
 
 
-+(void)useFingerPrinting:(BOOL)isEnable {
-    [[GetWebViewInfo shared] useFingerPrinting:isEnable];
-}
-
 
 +(NSString *) GetW2AEncrypt {
     NSUserDefaults *userDefaults =[NSUserDefaults standardUserDefaults];
@@ -824,7 +814,7 @@ static W2ABlock w2aBlock;
     if (IsAttribution) {
         block(IsAttribution, attribution_type, external_id, user_type);
     } else {// IsAttribution 为False 传入null
-        block(IsAttribution, @"", external_id, user_type);
+        block(IsAttribution,  @"", external_id, user_type);
     }
 }
 
@@ -832,24 +822,15 @@ static W2ABlock w2aBlock;
 //MARK:
 + (void)reuqestOnattibute : (NSString *) AppName success : (void(^)(void))block{
     NSUserDefaults *userDefaults =[NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:@[] forKey:@"HM_Adv_Data"];
+    [userDefaults synchronize];
     NSString *Gateway = [userDefaults objectForKey:@"HM_Gateway"];
     if (Gateway.length < 1) {
         return;
     }
     NSString *url = [NSString stringWithFormat:@"%@/onattibute", Gateway];
-    NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithDictionary:@{}];
+    NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithDictionary:[[HM_Config sharedManager] getWebFingerprint]];
     [dic setObject:AppName forKey:@"app_name"];
-    NSString *jsonString = [userDefaults objectForKey:@"HM_WebView_Fingerprint"];
-    if (jsonString.length > 0) {
-        NSDictionary *d = [[HM_Config sharedManager] dictionaryWithJsonString:jsonString];
-        [dic setObject:[d objectForKey:@"ca"] forKey:@"ca"];
-        [dic setObject:[d objectForKey:@"wg"] forKey:@"wg"];
-        [dic setObject:[d objectForKey:@"pi"] forKey:@"pi"];
-        [dic setObject:[d objectForKey:@"ao"] forKey:@"ao"];
-        [dic setObject:[d objectForKey:@"se"] forKey:@"se"];
-        [dic setObject:[d objectForKey:@"ft"] forKey:@"ft"];
-        [dic setObject:[d objectForKey:@"ua"] forKey:@"ua"];
-    }
     
     NSDictionary *device_info = [userDefaults objectForKey:@"HM_Device_Info"];
     NSDictionary *device_id = [userDefaults objectForKey:@"HM_Device_Id"];
@@ -921,20 +902,10 @@ static W2ABlock w2aBlock;
         return;
     }
     NSString *url = [NSString stringWithFormat:@"%@/reloadpagedata", Gateway];
-    NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithDictionary:@{}];
+    NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithDictionary:[[HM_Config sharedManager] getWebFingerprint]];
     NSString *AppName = [userDefaults objectForKey:@"HM_App_Name"];
     [dic setObject:AppName forKey:@"app_name"];
-    NSString *jsonString = [userDefaults objectForKey:@"HM_WebView_Fingerprint"];
-    if (jsonString.length > 0) {
-        NSDictionary *d = [[HM_Config sharedManager] dictionaryWithJsonString:jsonString];
-        [dic setObject:[d objectForKey:@"ca"] forKey:@"ca"];
-        [dic setObject:[d objectForKey:@"wg"] forKey:@"wg"];
-        [dic setObject:[d objectForKey:@"pi"] forKey:@"pi"];
-        [dic setObject:[d objectForKey:@"ao"] forKey:@"ao"];
-        [dic setObject:[d objectForKey:@"se"] forKey:@"se"];
-        [dic setObject:[d objectForKey:@"ft"] forKey:@"ft"];
-        [dic setObject:[d objectForKey:@"ua"] forKey:@"ua"];
-    }
+
     NSDictionary *d = @{
                           @"fingerprint_data" : dic
                         };
@@ -1050,6 +1021,9 @@ static W2ABlock w2aBlock;
         }
     }
     [userDefaults synchronize];
+}
+
++ (void)useFingerPrinting:(BOOL)isEnable {
 }
 
 @end
