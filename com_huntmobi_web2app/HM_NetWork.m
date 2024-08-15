@@ -83,6 +83,61 @@
     [dataTask resume];
 }
 
+- (void)requestJsonGet:(NSString *)relativePath params:(NSDictionary *)params successBlock:(HSResponseSuccessBlock)successBlock failBlock:(HSResponseFailBlock)failBlock
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *w2a = [userDefaults stringForKey:@"HM_W2a_Data"];
+    if (!w2a) {
+        w2a = @"";
+    }
+    
+    // 将 params 转换为查询字符串
+    NSMutableArray *queryItems = [NSMutableArray array];
+    [params enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        NSString *queryItem = [NSString stringWithFormat:@"%@=%@", key, obj];
+        [queryItems addObject:queryItem];
+    }];
+    NSString *queryString = [queryItems componentsJoinedByString:@"&"];
+    
+    // 构建 URL 字符串并附加查询字符串
+    NSString *urlString = [NSString stringWithFormat:@"%@%@?v=%.1lf&%@", self.requestURL, relativePath, [[HM_Config sharedManager] returnSDKVersion], queryString];
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:urlString]];
+    request.HTTPMethod = @"GET"; // 改为 GET 请求
+    [request setValue:w2a forHTTPHeaderField:@"w2a_data_encrypt"];
+    request.timeoutInterval = 30;
+    
+    NSDictionary *requestHeaders = request.allHTTPHeaderFields;
+    NSMutableString *headerString = [NSMutableString stringWithString:@"Request Headers:\n"];
+    [requestHeaders enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        [headerString appendFormat:@"%@: %@\n", key, obj];
+    }];
+    
+    NSURLSessionDataTask *dataTask = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (!error) {
+            if (successBlock) {
+                NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+                if (self.isEnableLog) {
+                    NSString *jsonStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                    if (data.length > 0) {
+                        HMLog(@"\n**************\n hm_event log \n\nurl:%@\n\n%@\n\nResponse:\n%@\n**************\n\n ", relativePath, headerString, jsonStr);
+                    }
+                }
+                if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                    successBlock([self changeType:responseObject]);
+                }
+            }
+        } else {
+            if (failBlock) {
+                if (error) {
+                    HMLog(@"**************\n hm_event log\n\nurl:%@\n\nrequestHeaders:\n%@\n\nerror:\n%@\n \n**************\n", relativePath, headerString, error);
+                    failBlock(error);
+                }
+            }
+        }
+    }];
+    [dataTask resume];
+}
 
 
 

@@ -32,6 +32,8 @@ typedef void(^HSResponseFailBlock)(NSError *error);
  */
 - (void)requestJsonPost:(NSString *)relativePath params:(NSDictionary *)params successBlock:(HSResponseSuccessBlock)successBlock failBlock:(HSResponseFailBlock)failBlock;
 
+- (void)requestJsonGet:(NSString *)relativePath params:(NSDictionary *)params successBlock:(HSResponseSuccessBlock)successBlock failBlock:(HSResponseFailBlock)failBlock;
+
 -(void) setLogEnabled:(BOOL) isEnable;
 
 @end

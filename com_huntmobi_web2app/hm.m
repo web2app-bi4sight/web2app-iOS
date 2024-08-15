@@ -8,6 +8,7 @@
 #import "hm.h"
 #import "HM_NetWork.h"
 #import "HM_Config.h"
+#import "GetWebViewInfo.h"
 #import "HM_WebView.h"
 
 @implementation hm
@@ -792,6 +793,10 @@ static W2ABlock w2aBlock;
 }
 
 
++(void)useFingerPrinting:(BOOL)isEnable {
+    [[GetWebViewInfo shared] useFingerPrinting:isEnable];
+}
+
 
 +(NSString *) GetW2AEncrypt {
     NSUserDefaults *userDefaults =[NSUserDefaults standardUserDefaults];
@@ -872,7 +877,7 @@ static W2ABlock w2aBlock;
 + (void)isSendW2A : (NSString *)w2a {
     NSUserDefaults *userDefaults =[NSUserDefaults standardUserDefaults];
     NSString *w2a_data_encrypt = [userDefaults objectForKey:@"HM_W2a_Data"];
-    if (![w2a isEqualToString:w2a_data_encrypt]) {
+    if (![w2a isEqualToString:w2a_data_encrypt] && w2a.length > 0) {
         [userDefaults setObject:w2a forKey:@"HM_W2a_Data"];
         [userDefaults synchronize];
         [hm sendW2A];
@@ -905,17 +910,20 @@ static W2ABlock w2aBlock;
     NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithDictionary:[[HM_Config sharedManager] getWebFingerprint]];
     NSString *AppName = [userDefaults objectForKey:@"HM_App_Name"];
     [dic setObject:AppName forKey:@"app_name"];
-
+    NSString *w2a_data_encrypt = [userDefaults objectForKey:@"HM_W2a_Data"];
     NSDictionary *d = @{
-                          @"fingerprint_data" : dic
+                          @"fingerprint_data" : dic,
+                          @"w2a_data_encrypt" : w2a_data_encrypt
                         };
     [[HM_NetWork shareInstance] requestJsonPost:url params:d successBlock:^(NSDictionary * _Nonnull responseObject) {
         NSString *code = [responseObject[@"code"] stringValue];
         if ([code isEqual: @"0"]) {
             NSDictionary *data = responseObject[@"data"];
             NSArray *adv_data = data[@"adv_data"];
+            NSString *w2a_data_encrypt = data[@"w2a_data_encrypt"];
             [userDefaults setObject:adv_data forKey:@"HM_Adv_Data"];
             [userDefaults synchronize];
+            [hm isSendW2A:w2a_data_encrypt];
             block([hm AdvDataRead]);
         } else {
             block(@[]);
@@ -1023,7 +1031,25 @@ static W2ABlock w2aBlock;
     [userDefaults synchronize];
 }
 
-+ (void)useFingerPrinting:(BOOL)isEnable {
++(void) EventKey:(NSString *)eventID {
+    NSUserDefaults *userDefaults =[NSUserDefaults standardUserDefaults];
+    NSString *w2a_data_encrypt = [userDefaults objectForKey:@"HM_W2a_Data"];
+    if (w2a_data_encrypt.length < 1){
+        return;
+    }
+    NSString *Gateway = [userDefaults objectForKey:@"HM_Gateway"];
+    if (Gateway.length < 1) {
+        return;
+    }
+    NSString *url = [NSString stringWithFormat:@"%@/eventkey", Gateway];
+    
+    [[HM_NetWork shareInstance] requestJsonGet:url params:@{@"eid" : eventID.length > 0 ? eventID : [hm getGUID]} successBlock:^(NSDictionary * _Nonnull responseObject) {
+        
+    } failBlock:^(NSError * _Nonnull error) {
+        if (error.code == -1001) {
+            
+        }
+    }];
 }
 
 @end

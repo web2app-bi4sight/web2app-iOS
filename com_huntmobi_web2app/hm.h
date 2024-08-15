@@ -183,7 +183,13 @@ typedef void (^W2ABlock)(NSArray *ad_data, NSString *w2a_data);
  */
 +(void)init:(NSString *)Gateway InstallEventName:(NSString *)InstallEventName IsNewUser: (BOOL)IsNewUser AppName: (NSString *)AppName ClipboardData:(NSString *)ClipboardData  success : (void(^)(NSArray * array))block  DEPRECATED_MSG_ATTRIBUTE("不推荐使用，如需使用联系HM技术支持确认");
 
-
+/**
+ *  2.5新增
+ *
+ *
+ *  @param eventID 事件ID，建议使用GUID确保唯一性，如果客户有自己的追踪的ID 时候，可以保持一致方便通过事件ID追踪数据链路，若无，可以给空字符串，SDK
+ */
++(void) EventKey:(NSString *)eventID;
 
 @end
 

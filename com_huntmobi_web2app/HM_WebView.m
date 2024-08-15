@@ -88,7 +88,7 @@ static HMWebBlock webBlock;
                 [userDefaults setObject:@"" forKey:@"HM_WebView_UA"];
             }
             [userDefaults synchronize];
-            webUABlock(userAgent);
+            webBlock();
         }];
     });
 }
