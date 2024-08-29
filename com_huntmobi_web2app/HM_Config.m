@@ -96,8 +96,31 @@
     };
 }
 
+- (NSArray<NSString *> *)matchesInString:(NSString *)input {
+    NSString *pattern = @"[BISGHT][A-Za-z0-9]{2}(L|K)[A-Za-z0-9]{7}[SMARL]";
+
+    NSError *error = nil;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
+    
+    if (error) {
+//        NSLog(@"正则表达式错误: %@", error.localizedDescription);
+        return @[];
+    }
+    
+    NSRange range = NSMakeRange(0, input.length);
+    NSArray<NSTextCheckingResult *> *matches = [regex matchesInString:input options:0 range:range];
+    
+    NSMutableArray<NSString *> *results = [NSMutableArray array];
+    
+    for (NSTextCheckingResult *match in matches) {
+        NSString *matchedString = [input substringWithRange:match.range];
+        [results addObject:matchedString];
+    }
+    return [results copy];
+}
+
 - (CGFloat)returnSDKVersion {
-    return 2.4;
+    return 2.5;
 }
 
 - (NSString *)currentUTCTimestamp {

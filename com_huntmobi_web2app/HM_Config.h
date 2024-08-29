@@ -53,6 +53,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL) isNewUser;
 
 - (NSDictionary *)getWebFingerprint;
+
+- (NSArray<NSString *> *)matchesInString:(NSString *)input;
+
 @end
 
 NS_ASSUME_NONNULL_END

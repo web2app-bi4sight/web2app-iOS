@@ -8,7 +8,6 @@
 #import "hm.h"
 #import "HM_NetWork.h"
 #import "HM_Config.h"
-#import "GetWebViewInfo.h"
 #import "HM_WebView.h"
 
 @implementation hm
@@ -158,7 +157,8 @@ static W2ABlock w2aBlock;
     NSDictionary *dic = @{@"device_info" : device_info,
                           @"device_id" : device_id,
                           @"customData" : @{@"event_name" : event_name, @"event_id" : event_id, @"event_time" : [[HM_Config sharedManager] currentUTCTimestamp]},
-                          @"w2a_data_encrypt" : w2a_data_encrypt};
+                          @"w2a_data_encrypt" : w2a_data_encrypt
+                          };
     [[HM_NetWork shareInstance] requestJsonPost:url params:dic successBlock:^(NSDictionary * _Nonnull responseObject) {
         NSString *code = [responseObject[@"code"] stringValue];
         if ([code isEqual: @"0"]) {
@@ -794,7 +794,6 @@ static W2ABlock w2aBlock;
 
 
 +(void)useFingerPrinting:(BOOL)isEnable {
-    [[GetWebViewInfo shared] useFingerPrinting:isEnable];
 }
 
 

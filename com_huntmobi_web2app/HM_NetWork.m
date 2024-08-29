@@ -90,7 +90,11 @@
     if (!w2a) {
         w2a = @"";
     }
-    
+    NSString *HM_DeviceID_Data = [userDefaults stringForKey:@"__hm_uuid__"];
+    if (!HM_DeviceID_Data) {
+        HM_DeviceID_Data = @"";
+    }   
+
     // 将 params 转换为查询字符串
     NSMutableArray *queryItems = [NSMutableArray array];
     [params enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -104,7 +108,8 @@
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:urlString]];
     request.HTTPMethod = @"GET"; // 改为 GET 请求
-    [request setValue:w2a forHTTPHeaderField:@"w2a_data_encrypt"];
+    [request setValue:w2a forHTTPHeaderField:@"w2a_data_encrypt"];    
+    [request setValue:HM_DeviceID_Data forHTTPHeaderField:@"__hm_uuid__"];
     request.timeoutInterval = 30;
     
     NSDictionary *requestHeaders = request.allHTTPHeaderFields;

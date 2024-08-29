@@ -48,22 +48,17 @@
 -(void) attibuteBlock : (void(^)(NSDictionary * dic))block {
     NSUserDefaults *userDefaults =[NSUserDefaults standardUserDefaults];
     NSString *key = @"HM_ISFIRSTINSTALL";
-    BOOL isFirst = NO;
-    if ([userDefaults objectForKey:key] != nil) {
-        isFirst = [userDefaults boolForKey:key];
-    } else {
-        isFirst = YES;
-    }
+    BOOL isFirst = ![userDefaults objectForKey:key] || [userDefaults boolForKey:key];
     if (isFirst) {// 是新用户
-        isFirst = NO;
         self.isAddRequest = true;
-        [userDefaults setBool:isFirst forKey:@"HM_ISFIRSTINSTALL"];
+        [userDefaults setBool:NO forKey:key];
         [userDefaults setObject:self.codeString forKey:@"HM_SMARTLINK_SCODE"];
             [self handleNewUser:^(NSDictionary *dic) {
                 block(dic);
             }];
     } else {
         if (self.isAddRequest) return;
+        self.isAddRequest = true;
         [self handleExistingUser:^(NSDictionary *dic) {
             block(dic);
         }];
@@ -114,7 +109,10 @@
     // 新用户逻辑处理
     NSString *copyString = [[UIPasteboard generalPasteboard] string];
     if (copyString != nil) { //剪切板处理
-        self.cbcString = copyString.length > 0 ? copyString : @"";
+        NSArray *correctArray = [[HM_Config sharedManager] matchesInString:copyString];
+        if(correctArray.count > 0) {
+            self.cbcString = [correctArray componentsJoinedByString:@""];
+        }
     }
     self.atcString = @"add";
     [self getWebViewInfo:block];
