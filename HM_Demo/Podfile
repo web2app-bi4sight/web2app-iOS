@@ -1,0 +1,27 @@
+platform :ios, '13.0'
+
+target 'HM_Demo' do
+
+
+use_frameworks!
+
+
+# 屏蔽所有第三方框架警告
+inhibit_all_warnings!
+
+pod 'com_huntmobi_web2app', '~> 2.5.1'
+
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+    end
+  end
+end
+
+end
+
+
+
+
