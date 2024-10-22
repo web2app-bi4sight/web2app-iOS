@@ -48,6 +48,32 @@
     [userDefaults synchronize];
 }
 
+- (void) saveWADeviceInfo {
+    NSDictionary *deviceInfo = @{
+        @"pgname": [self getAppBundleName] ?: @"",
+        @"appversion": [self getAppExternalVersion] ?: @"",
+        @"appver": [self getAppInternalVersion] ?: @"",
+        @"osversion": [self getSystemVersion] ?: @"",
+        @"model": [self getDeviceModel] ?: @"",
+        @"timezoon": [self getTimeZone] ?: @"",
+        @"phinfo" : @"iOS",
+        @"ss_w": [self getScreenWidth] ?: @"",
+        @"ss_h": [self getScreenHeight] ?: @"",
+        @"screensize": [self getScreenDensity] ?: @"",
+        @"cpu": [self getCpuCoreCount] ?: @"",
+        @"brand": [self getManufacturer] ?: @"Apple",
+        @"language": [self getSystemLanguage] ?: @"",
+        @"systemcountry": [self getSystemCountry] ?: @"",
+        @"idfv": [self getIDFV] ?: @"",
+        @"advertiser_id": @"",
+        @"android_id": @"",
+        @"sdk" : @""
+    };
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:deviceInfo forKey:@"HM_WADevice_Data"];
+    [userDefaults synchronize];
+}
+
 - (NSString *)getAppBundleName {
     return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
 }

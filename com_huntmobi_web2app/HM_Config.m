@@ -119,8 +119,38 @@
     return [results copy];
 }
 
+- (BOOL)isW2ADataString:(NSString *)inputString {
+//    NSString *pattern = @"^w2akey_.*_bi$";
+    NSString *pattern = @"^w2a_data:.*";
+    NSError *error = nil;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
+    if (error) {
+        NSLog(@"正则表达式错误: %@", error.localizedDescription);
+        return NO;
+    }
+    NSRange range = NSMakeRange(0, inputString.length);
+    NSUInteger matchCount = [regex numberOfMatchesInString:inputString options:0 range:range];
+    return matchCount > 0;
+}
+
+- (BOOL)isW2AKeyString:(NSString *)inputString {
+    if (inputString == nil) {
+        return NO;
+    }
+    NSString *pattern = @".*_bi$";
+    NSError *error = nil;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
+    if (error) {
+        NSLog(@"正则表达式错误: %@", error.localizedDescription);
+        return NO;
+    }
+    NSRange range = NSMakeRange(0, inputString.length);
+    NSUInteger matchCount = [regex numberOfMatchesInString:inputString options:0 range:range];
+    return matchCount > 0;
+}
+
 - (CGFloat)returnSDKVersion {
-    return 2.5;
+    return 3.0;
 }
 
 - (NSString *)currentUTCTimestamp {

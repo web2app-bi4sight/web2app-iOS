@@ -56,6 +56,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSArray<NSString *> *)matchesInString:(NSString *)input;
 
+- (BOOL)isW2ADataString:(NSString *)inputString;
+
+- (BOOL)isW2AKeyString:(NSString *)inputString;
+    
 @end
 
 NS_ASSUME_NONNULL_END

@@ -9,8 +9,15 @@
 #import "HM_NetWork.h"
 
 #define baseURL @"https://sl.bi4sight.com"
-
 #define slattibute @"slattibute"
+
+#define baseWAURL @"https://cdn.bi4sight.com"
+#define attribute @"w2a/attribute"
+#define eventpost @"w2a/eventpost"
+#define customerinfo @"w2a/customerinfo"
+
+
+
 
 @implementation HM_Event
 
@@ -43,5 +50,31 @@
     NSString *url = [NSString stringWithFormat:@"%@/%@", host, path];
     return url;
 }
+
+- (void)WAEvent:(NSString *)eventName withValues:(NSDictionary * _Nullable)values andBlock : (void(^)(NSDictionary * responseObject))block {
+    [[HM_NetWork shareInstance] requestJsonPost:[self setWAUrlWithEvent:eventName] params:values successBlock:^(NSDictionary * _Nonnull responseObject) {
+        NSString *code = [responseObject[@"code"] stringValue];
+        if ([code isEqual: @"0"]) {
+            block(responseObject);
+        }
+    } failBlock:^(NSError * _Nonnull error) {
+        
+    }];
+}
+
+- (NSString *)setWAUrlWithEvent : (NSString *)eventName {
+    NSString *host = baseWAURL;
+    NSString *path = @"";
+    if ([eventName isEqualToString: @"CompleteRegistration"]) {
+        path = attribute;
+    } else if ([eventName isEqualToString:@"EventPost"]) {
+        path = eventpost;
+    } else if ([eventName isEqualToString:@"UpDateUserInfo"]) {
+        path = customerinfo;
+    }
+    NSString *url = [NSString stringWithFormat:@"%@/%@", host, path];
+    return url;
+}
+
 
 @end
