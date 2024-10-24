@@ -7,156 +7,51 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		21E6A38029588B7D3601FC9E1F2EB9E2 /* HM_WebView.m in Sources */ = {isa = PBXBuildFile; fileRef = FDDB183F6F9A8FC6819EAC901F00C5A1 /* HM_WebView.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		2C4B9B3C7F079DFEA772D3F2FF3C8CED /* com_huntmobi_web2app-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = ECDA2D90C60FCD5CE241A2833D496F72 /* com_huntmobi_web2app-dummy.m */; };
-		3B3877F9079812574EFEDF77512EA859 /* HM_WebView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01FCCB58933C62BF6E6BC81687011376 /* HM_WebView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3DAD2BB1B3AFB34F8DA5DC26E03BE9AA /* HM_SmartLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE013BA87DD83EDA54ECC72A063D9B1 /* HM_SmartLink.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		60BC03C5FA356C598532F8F965215299 /* HM_Event.h in Headers */ = {isa = PBXBuildFile; fileRef = 52D8CAD45657A512FFF27F6ACD84C783 /* HM_Event.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6BFAA0068CEE51359551E8AA5276FC8E /* com_huntmobi_web2app-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = E4C5C867180938C96DF0BFB8B0DE37AD /* com_huntmobi_web2app-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7798429E5B03852D82DF86500D3B72A3 /* HM_NetWork.m in Sources */ = {isa = PBXBuildFile; fileRef = 24C67EA1EE71D68394342897AB21B4D2 /* HM_NetWork.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		78396A0F0D949FE2EF7167E11684EE96 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
-		7C0E353FE3D6732B993F9686508A7AE3 /* hm.m in Sources */ = {isa = PBXBuildFile; fileRef = 49E508E8290432FECC96A2C54E759ABF /* hm.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		A7165DD4A1D1A9ACD0D47899BAB5E944 /* HM_DeviceData.m in Sources */ = {isa = PBXBuildFile; fileRef = B1DAE019980F97006A141F144850A418 /* HM_DeviceData.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		A9771D526965301009A54594030D0B17 /* Pods-HM_Demo-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = D57FE122A368C459D09A62B8AB08B181 /* Pods-HM_Demo-dummy.m */; };
-		B2266ED55CDA151EB5D56A78BB368909 /* HM_DeviceData.h in Headers */ = {isa = PBXBuildFile; fileRef = 5245F8E98149DEF066B7E27B6301CB81 /* HM_DeviceData.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B4853AC0B986D9E8DB14D83F92C41DF7 /* hm.h in Headers */ = {isa = PBXBuildFile; fileRef = A83BE9429D2583D9F23F968C05BB7152 /* hm.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BDE90931C6BB2A1455D4DBE5AD621C8A /* HM_SmartLink.h in Headers */ = {isa = PBXBuildFile; fileRef = DB0FB5D6F51B7129E3C627C1CA03E52C /* HM_SmartLink.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C07BA44EA0C2D049C2A2D68CD094A5F8 /* HM_Config.m in Sources */ = {isa = PBXBuildFile; fileRef = 111DCAE332429D7B5F95DE6665A72366 /* HM_Config.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		C717E01CE9EDC756F5F269639B57F33B /* Pods-HM_Demo-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 79EA9D6BAE16E4349C809A038DEF5E8A /* Pods-HM_Demo-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C90CA0FE12A3D1F3A5A1E8174C5F1F55 /* HM_Config.h in Headers */ = {isa = PBXBuildFile; fileRef = 9BABE09C8B8CD36FFA0499ED8861DB14 /* HM_Config.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D7A8CA41556BA207EA6040DB0A60DF9A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
-		DB0996C795AD5DF3480035A18564FD75 /* HM_Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 688F5B96C09DC2556DEE8AF443AB7BB8 /* HM_Event.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		F29B53AB45DCF70ADF07922A9E142F40 /* HM_NetWork.h in Headers */ = {isa = PBXBuildFile; fileRef = 409FB5AE2AA6450F6BF46E379583099F /* HM_NetWork.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		462D71835E4E84C557E15AE17E2D19C9 /* Pods-HM_Demo-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A63638C34CBD5787A0B382CFE9E7B82C /* Pods-HM_Demo-dummy.m */; };
+		93580680ABF955DC02D1DA0EA6122C70 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
+		967418B68CFE2F0CB20AFDB86B4A0D04 /* Pods-HM_Demo-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = D8A665BF8A52879CA38A3F9F8A36B484 /* Pods-HM_Demo-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		BE8A1CA843F1F5C12AB6F80F91C23CCE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 85C6E38295ECD9D1F53ACB0B1931E8BE;
-			remoteInfo = com_huntmobi_web2app;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		01FCCB58933C62BF6E6BC81687011376 /* HM_WebView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = HM_WebView.h; path = com_huntmobi_web2app/HM_WebView.h; sourceTree = "<group>"; };
-		111DCAE332429D7B5F95DE6665A72366 /* HM_Config.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = HM_Config.m; path = com_huntmobi_web2app/HM_Config.m; sourceTree = "<group>"; };
-		24C67EA1EE71D68394342897AB21B4D2 /* HM_NetWork.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = HM_NetWork.m; path = com_huntmobi_web2app/HM_NetWork.m; sourceTree = "<group>"; };
-		409FB5AE2AA6450F6BF46E379583099F /* HM_NetWork.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = HM_NetWork.h; path = com_huntmobi_web2app/HM_NetWork.h; sourceTree = "<group>"; };
-		49E508E8290432FECC96A2C54E759ABF /* hm.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = hm.m; path = com_huntmobi_web2app/hm.m; sourceTree = "<group>"; };
-		4CE013BA87DD83EDA54ECC72A063D9B1 /* HM_SmartLink.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = HM_SmartLink.m; path = com_huntmobi_web2app/HM_SmartLink.m; sourceTree = "<group>"; };
-		4E8BEFC9D400434774EF150A163A9998 /* Pods-HM_Demo-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-HM_Demo-Info.plist"; sourceTree = "<group>"; };
-		51FE4FA89161372E101C684F21B8D081 /* Pods-HM_Demo.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-HM_Demo.modulemap"; sourceTree = "<group>"; };
-		5245F8E98149DEF066B7E27B6301CB81 /* HM_DeviceData.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = HM_DeviceData.h; path = com_huntmobi_web2app/HM_DeviceData.h; sourceTree = "<group>"; };
-		52D8CAD45657A512FFF27F6ACD84C783 /* HM_Event.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = HM_Event.h; path = com_huntmobi_web2app/HM_Event.h; sourceTree = "<group>"; };
-		5CD57A7A3E862B00739BE1B08DF81673 /* com_huntmobi_web2app-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "com_huntmobi_web2app-prefix.pch"; sourceTree = "<group>"; };
-		6476F28E3C6BA5497F66876536CE5BA9 /* com_huntmobi_web2app.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = com_huntmobi_web2app.debug.xcconfig; sourceTree = "<group>"; };
-		688F5B96C09DC2556DEE8AF443AB7BB8 /* HM_Event.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = HM_Event.m; path = com_huntmobi_web2app/HM_Event.m; sourceTree = "<group>"; };
 		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		79EA9D6BAE16E4349C809A038DEF5E8A /* Pods-HM_Demo-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-HM_Demo-umbrella.h"; sourceTree = "<group>"; };
-		7F6033585755BDC0373BF7C6721E18E9 /* Pods-HM_Demo-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-HM_Demo-acknowledgements.markdown"; sourceTree = "<group>"; };
-		883CB4DAFC4ED7589D80686754B90E62 /* com_huntmobi_web2app */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = com_huntmobi_web2app; path = com_huntmobi_web2app.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8F8C45B668B292A292737FD28A71B66B /* Pods-HM_Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-HM_Demo.debug.xcconfig"; sourceTree = "<group>"; };
-		9BABE09C8B8CD36FFA0499ED8861DB14 /* HM_Config.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = HM_Config.h; path = com_huntmobi_web2app/HM_Config.h; sourceTree = "<group>"; };
+		75C7F73357456D56F4DC372670FAB177 /* Pods-HM_Demo-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-HM_Demo-Info.plist"; sourceTree = "<group>"; };
+		75FC454729FD1CE10D3F8EEF16DF56FB /* Pods-HM_Demo.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-HM_Demo.modulemap"; sourceTree = "<group>"; };
+		774BABDAE9126920CBB94DF1D0C40713 /* Pods-HM_Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-HM_Demo.debug.xcconfig"; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		9E86A3B3299D8CB1D4396E510B7A35BA /* com_huntmobi_web2app-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "com_huntmobi_web2app-Info.plist"; sourceTree = "<group>"; };
 		A4403AA73F4EB1995315585D9AFD74C1 /* Pods-HM_Demo */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-HM_Demo"; path = Pods_HM_Demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A83BE9429D2583D9F23F968C05BB7152 /* hm.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = hm.h; path = com_huntmobi_web2app/hm.h; sourceTree = "<group>"; };
-		B1DAE019980F97006A141F144850A418 /* HM_DeviceData.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = HM_DeviceData.m; path = com_huntmobi_web2app/HM_DeviceData.m; sourceTree = "<group>"; };
-		B815111ED29BB3584AC7CE8BB043A622 /* com_huntmobi_web2app.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = com_huntmobi_web2app.release.xcconfig; sourceTree = "<group>"; };
-		C7C06652336587BB7C233EAB09630EF6 /* Pods-HM_Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-HM_Demo.release.xcconfig"; sourceTree = "<group>"; };
-		D3B38CF6CE65C77C340EF0FED13857BF /* Pods-HM_Demo-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-HM_Demo-frameworks.sh"; sourceTree = "<group>"; };
-		D57FE122A368C459D09A62B8AB08B181 /* Pods-HM_Demo-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-HM_Demo-dummy.m"; sourceTree = "<group>"; };
-		DB0FB5D6F51B7129E3C627C1CA03E52C /* HM_SmartLink.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = HM_SmartLink.h; path = com_huntmobi_web2app/HM_SmartLink.h; sourceTree = "<group>"; };
-		DE170446E2E77C5FBECB9D649D61CE08 /* com_huntmobi_web2app.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = com_huntmobi_web2app.modulemap; sourceTree = "<group>"; };
-		E4C5C867180938C96DF0BFB8B0DE37AD /* com_huntmobi_web2app-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "com_huntmobi_web2app-umbrella.h"; sourceTree = "<group>"; };
-		ECDA2D90C60FCD5CE241A2833D496F72 /* com_huntmobi_web2app-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "com_huntmobi_web2app-dummy.m"; sourceTree = "<group>"; };
-		F58BEB490402338742A8CCB8A7C1D2BC /* Pods-HM_Demo-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-HM_Demo-acknowledgements.plist"; sourceTree = "<group>"; };
-		FDDB183F6F9A8FC6819EAC901F00C5A1 /* HM_WebView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = HM_WebView.m; path = com_huntmobi_web2app/HM_WebView.m; sourceTree = "<group>"; };
+		A63638C34CBD5787A0B382CFE9E7B82C /* Pods-HM_Demo-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-HM_Demo-dummy.m"; sourceTree = "<group>"; };
+		AE990EC6C37B4A5DFBD607419945D3AB /* Pods-HM_Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-HM_Demo.release.xcconfig"; sourceTree = "<group>"; };
+		D8A665BF8A52879CA38A3F9F8A36B484 /* Pods-HM_Demo-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-HM_Demo-umbrella.h"; sourceTree = "<group>"; };
+		E9D461F60AC523D74F910D339239346D /* Pods-HM_Demo-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-HM_Demo-acknowledgements.markdown"; sourceTree = "<group>"; };
+		FD22A13ED2CA673FE72BDFCEEB4B86DC /* Pods-HM_Demo-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-HM_Demo-acknowledgements.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		295A907D3D694729CAF7CDC36EF0EFD3 /* Frameworks */ = {
+		64CCE0A7EF35F6589134726A774B6DEF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D7A8CA41556BA207EA6040DB0A60DF9A /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E77360345D7D69FEB45341AB00C8A5AB /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				78396A0F0D949FE2EF7167E11684EE96 /* Foundation.framework in Frameworks */,
+				93580680ABF955DC02D1DA0EA6122C70 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		01AB2D3EABBFA042997EC8E35A1A2F42 /* Support Files */ = {
+		0D92F8DEC0D4FD096564F172A9EF0EF3 /* Pods-HM_Demo */ = {
 			isa = PBXGroup;
 			children = (
-				DE170446E2E77C5FBECB9D649D61CE08 /* com_huntmobi_web2app.modulemap */,
-				ECDA2D90C60FCD5CE241A2833D496F72 /* com_huntmobi_web2app-dummy.m */,
-				9E86A3B3299D8CB1D4396E510B7A35BA /* com_huntmobi_web2app-Info.plist */,
-				5CD57A7A3E862B00739BE1B08DF81673 /* com_huntmobi_web2app-prefix.pch */,
-				E4C5C867180938C96DF0BFB8B0DE37AD /* com_huntmobi_web2app-umbrella.h */,
-				6476F28E3C6BA5497F66876536CE5BA9 /* com_huntmobi_web2app.debug.xcconfig */,
-				B815111ED29BB3584AC7CE8BB043A622 /* com_huntmobi_web2app.release.xcconfig */,
-			);
-			name = "Support Files";
-			path = "../Target Support Files/com_huntmobi_web2app";
-			sourceTree = "<group>";
-		};
-		35E1F82B23970B2390DA6C77C5BFB9E8 /* com_huntmobi_web2app */ = {
-			isa = PBXGroup;
-			children = (
-				A83BE9429D2583D9F23F968C05BB7152 /* hm.h */,
-				49E508E8290432FECC96A2C54E759ABF /* hm.m */,
-				9BABE09C8B8CD36FFA0499ED8861DB14 /* HM_Config.h */,
-				111DCAE332429D7B5F95DE6665A72366 /* HM_Config.m */,
-				5245F8E98149DEF066B7E27B6301CB81 /* HM_DeviceData.h */,
-				B1DAE019980F97006A141F144850A418 /* HM_DeviceData.m */,
-				52D8CAD45657A512FFF27F6ACD84C783 /* HM_Event.h */,
-				688F5B96C09DC2556DEE8AF443AB7BB8 /* HM_Event.m */,
-				409FB5AE2AA6450F6BF46E379583099F /* HM_NetWork.h */,
-				24C67EA1EE71D68394342897AB21B4D2 /* HM_NetWork.m */,
-				DB0FB5D6F51B7129E3C627C1CA03E52C /* HM_SmartLink.h */,
-				4CE013BA87DD83EDA54ECC72A063D9B1 /* HM_SmartLink.m */,
-				01FCCB58933C62BF6E6BC81687011376 /* HM_WebView.h */,
-				FDDB183F6F9A8FC6819EAC901F00C5A1 /* HM_WebView.m */,
-				01AB2D3EABBFA042997EC8E35A1A2F42 /* Support Files */,
-			);
-			name = com_huntmobi_web2app;
-			path = com_huntmobi_web2app;
-			sourceTree = "<group>";
-		};
-		4688BC6A8BEB20D476D4EDB2E05470E4 /* Pods-HM_Demo */ = {
-			isa = PBXGroup;
-			children = (
-				51FE4FA89161372E101C684F21B8D081 /* Pods-HM_Demo.modulemap */,
-				7F6033585755BDC0373BF7C6721E18E9 /* Pods-HM_Demo-acknowledgements.markdown */,
-				F58BEB490402338742A8CCB8A7C1D2BC /* Pods-HM_Demo-acknowledgements.plist */,
-				D57FE122A368C459D09A62B8AB08B181 /* Pods-HM_Demo-dummy.m */,
-				D3B38CF6CE65C77C340EF0FED13857BF /* Pods-HM_Demo-frameworks.sh */,
-				4E8BEFC9D400434774EF150A163A9998 /* Pods-HM_Demo-Info.plist */,
-				79EA9D6BAE16E4349C809A038DEF5E8A /* Pods-HM_Demo-umbrella.h */,
-				8F8C45B668B292A292737FD28A71B66B /* Pods-HM_Demo.debug.xcconfig */,
-				C7C06652336587BB7C233EAB09630EF6 /* Pods-HM_Demo.release.xcconfig */,
+				75FC454729FD1CE10D3F8EEF16DF56FB /* Pods-HM_Demo.modulemap */,
+				E9D461F60AC523D74F910D339239346D /* Pods-HM_Demo-acknowledgements.markdown */,
+				FD22A13ED2CA673FE72BDFCEEB4B86DC /* Pods-HM_Demo-acknowledgements.plist */,
+				A63638C34CBD5787A0B382CFE9E7B82C /* Pods-HM_Demo-dummy.m */,
+				75C7F73357456D56F4DC372670FAB177 /* Pods-HM_Demo-Info.plist */,
+				D8A665BF8A52879CA38A3F9F8A36B484 /* Pods-HM_Demo-umbrella.h */,
+				774BABDAE9126920CBB94DF1D0C40713 /* Pods-HM_Demo.debug.xcconfig */,
+				AE990EC6C37B4A5DFBD607419945D3AB /* Pods-HM_Demo.release.xcconfig */,
 			);
 			name = "Pods-HM_Demo";
 			path = "Target Support Files/Pods-HM_Demo";
-			sourceTree = "<group>";
-		};
-		54555D4C8ECDDC3EEE1AFEA2087E5870 /* Targets Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				4688BC6A8BEB20D476D4EDB2E05470E4 /* Pods-HM_Demo */,
-			);
-			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
 		578452D2E740E91742655AC8F1636D1F /* iOS */ = {
@@ -167,12 +62,20 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
-		CBD67AF0A9A5D2E9732D244DE14C1CD5 /* Pods */ = {
+		A20B86066860CD686C8865C4B22B5FB4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				35E1F82B23970B2390DA6C77C5BFB9E8 /* com_huntmobi_web2app */,
+				A4403AA73F4EB1995315585D9AFD74C1 /* Pods-HM_Demo */,
 			);
-			name = Pods;
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AA058E909D3BB28B5E7537A1892905D8 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				0D92F8DEC0D4FD096564F172A9EF0EF3 /* Pods-HM_Demo */,
+			);
+			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
 		CF1408CF629C7361332E53B88F7BD30C = {
@@ -180,9 +83,8 @@
 			children = (
 				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
 				D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */,
-				CBD67AF0A9A5D2E9732D244DE14C1CD5 /* Pods */,
-				FB9A5773FFBC0E2D1870FB38E5979EEA /* Products */,
-				54555D4C8ECDDC3EEE1AFEA2087E5870 /* Targets Support Files */,
+				A20B86066860CD686C8865C4B22B5FB4 /* Products */,
+				AA058E909D3BB28B5E7537A1892905D8 /* Targets Support Files */,
 			);
 			sourceTree = "<group>";
 		};
@@ -194,75 +96,32 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		FB9A5773FFBC0E2D1870FB38E5979EEA /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				883CB4DAFC4ED7589D80686754B90E62 /* com_huntmobi_web2app */,
-				A4403AA73F4EB1995315585D9AFD74C1 /* Pods-HM_Demo */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		4B5177A5F0C08774B99DF14DD94603DB /* Headers */ = {
+		5F7ED9AB66C15923FF089F74E744FFD2 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C717E01CE9EDC756F5F269639B57F33B /* Pods-HM_Demo-umbrella.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BEB5F8E93929B68DD4912BF424032347 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6BFAA0068CEE51359551E8AA5276FC8E /* com_huntmobi_web2app-umbrella.h in Headers */,
-				B4853AC0B986D9E8DB14D83F92C41DF7 /* hm.h in Headers */,
-				C90CA0FE12A3D1F3A5A1E8174C5F1F55 /* HM_Config.h in Headers */,
-				B2266ED55CDA151EB5D56A78BB368909 /* HM_DeviceData.h in Headers */,
-				60BC03C5FA356C598532F8F965215299 /* HM_Event.h in Headers */,
-				F29B53AB45DCF70ADF07922A9E142F40 /* HM_NetWork.h in Headers */,
-				BDE90931C6BB2A1455D4DBE5AD621C8A /* HM_SmartLink.h in Headers */,
-				3B3877F9079812574EFEDF77512EA859 /* HM_WebView.h in Headers */,
+				967418B68CFE2F0CB20AFDB86B4A0D04 /* Pods-HM_Demo-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		85C6E38295ECD9D1F53ACB0B1931E8BE /* com_huntmobi_web2app */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 74DAFFB5DD48C28E6B57607ACEB580F5 /* Build configuration list for PBXNativeTarget "com_huntmobi_web2app" */;
-			buildPhases = (
-				BEB5F8E93929B68DD4912BF424032347 /* Headers */,
-				95309071A11EECA058FF255C2BE1D9EE /* Sources */,
-				E77360345D7D69FEB45341AB00C8A5AB /* Frameworks */,
-				AF8126F2599F2F984734F889EAF86F4C /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = com_huntmobi_web2app;
-			productName = com_huntmobi_web2app;
-			productReference = 883CB4DAFC4ED7589D80686754B90E62 /* com_huntmobi_web2app */;
-			productType = "com.apple.product-type.framework";
-		};
 		9F08076827155E67F39CA15D5245CF0C /* Pods-HM_Demo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EA36E1501F624AE8E6C37CC2350512CA /* Build configuration list for PBXNativeTarget "Pods-HM_Demo" */;
+			buildConfigurationList = 9CCCB162D81CCE72DCB894E5FECCE654 /* Build configuration list for PBXNativeTarget "Pods-HM_Demo" */;
 			buildPhases = (
-				4B5177A5F0C08774B99DF14DD94603DB /* Headers */,
-				C5B4BBDBF427AF661906ABADC21E24DF /* Sources */,
-				295A907D3D694729CAF7CDC36EF0EFD3 /* Frameworks */,
-				2CA65E097958EE2ABE476C01C5D9854B /* Resources */,
+				5F7ED9AB66C15923FF089F74E744FFD2 /* Headers */,
+				21A20B589B63A281102BC48EACD81A97 /* Sources */,
+				64CCE0A7EF35F6589134726A774B6DEF /* Frameworks */,
+				773C7074531E335FEBC74D074C227E78 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				111C43C51CE0675CAFA960986057FCBA /* PBXTargetDependency */,
 			);
 			name = "Pods-HM_Demo";
 			productName = Pods_HM_Demo;
@@ -287,25 +146,17 @@
 				en,
 			);
 			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
-			productRefGroup = FB9A5773FFBC0E2D1870FB38E5979EEA /* Products */;
+			productRefGroup = A20B86066860CD686C8865C4B22B5FB4 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				85C6E38295ECD9D1F53ACB0B1931E8BE /* com_huntmobi_web2app */,
 				9F08076827155E67F39CA15D5245CF0C /* Pods-HM_Demo */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		2CA65E097958EE2ABE476C01C5D9854B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		AF8126F2599F2F984734F889EAF86F4C /* Resources */ = {
+		773C7074531E335FEBC74D074C227E78 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -315,44 +166,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		95309071A11EECA058FF255C2BE1D9EE /* Sources */ = {
+		21A20B589B63A281102BC48EACD81A97 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2C4B9B3C7F079DFEA772D3F2FF3C8CED /* com_huntmobi_web2app-dummy.m in Sources */,
-				7C0E353FE3D6732B993F9686508A7AE3 /* hm.m in Sources */,
-				C07BA44EA0C2D049C2A2D68CD094A5F8 /* HM_Config.m in Sources */,
-				A7165DD4A1D1A9ACD0D47899BAB5E944 /* HM_DeviceData.m in Sources */,
-				DB0996C795AD5DF3480035A18564FD75 /* HM_Event.m in Sources */,
-				7798429E5B03852D82DF86500D3B72A3 /* HM_NetWork.m in Sources */,
-				3DAD2BB1B3AFB34F8DA5DC26E03BE9AA /* HM_SmartLink.m in Sources */,
-				21E6A38029588B7D3601FC9E1F2EB9E2 /* HM_WebView.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C5B4BBDBF427AF661906ABADC21E24DF /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A9771D526965301009A54594030D0B17 /* Pods-HM_Demo-dummy.m in Sources */,
+				462D71835E4E84C557E15AE17E2D19C9 /* Pods-HM_Demo-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		111C43C51CE0675CAFA960986057FCBA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = com_huntmobi_web2app;
-			target = 85C6E38295ECD9D1F53ACB0B1931E8BE /* com_huntmobi_web2app */;
-			targetProxy = BE8A1CA843F1F5C12AB6F80F91C23CCE /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
-		2E9496343BC46E46CFAE78AE4AA16CA1 /* Release */ = {
+		474CC2B61359CC00DA956CA9BD23E486 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C7C06652336587BB7C233EAB09630EF6 /* Pods-HM_Demo.release.xcconfig */;
+			baseConfigurationReference = 774BABDAE9126920CBB94DF1D0C40713 /* Pods-HM_Demo.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ENABLE_OBJC_WEAK = NO;
@@ -382,11 +209,10 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Release;
+			name = Debug;
 		};
 		8DE5143C03248BB6CD542DE3963D6F3A /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -516,80 +342,9 @@
 			};
 			name = Release;
 		};
-		A14D9AFF17538EFD223CF5EDB25559E2 /* Debug */ = {
+		C515CA5F122A863E48DDD4DEF0CA7988 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6476F28E3C6BA5497F66876536CE5BA9 /* com_huntmobi_web2app.debug.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/com_huntmobi_web2app/com_huntmobi_web2app-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/com_huntmobi_web2app/com_huntmobi_web2app-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MODULEMAP_FILE = "Target Support Files/com_huntmobi_web2app/com_huntmobi_web2app.modulemap";
-				PRODUCT_MODULE_NAME = com_huntmobi_web2app;
-				PRODUCT_NAME = com_huntmobi_web2app;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		A3C667FFD0A4426C2961D004F552AD86 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = B815111ED29BB3584AC7CE8BB043A622 /* com_huntmobi_web2app.release.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/com_huntmobi_web2app/com_huntmobi_web2app-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/com_huntmobi_web2app/com_huntmobi_web2app-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MODULEMAP_FILE = "Target Support Files/com_huntmobi_web2app/com_huntmobi_web2app.modulemap";
-				PRODUCT_MODULE_NAME = com_huntmobi_web2app;
-				PRODUCT_NAME = com_huntmobi_web2app;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		C06DBC88453D47D23D11F22A41D92CA3 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8F8C45B668B292A292737FD28A71B66B /* Pods-HM_Demo.debug.xcconfig */;
+			baseConfigurationReference = AE990EC6C37B4A5DFBD607419945D3AB /* Pods-HM_Demo.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ENABLE_OBJC_WEAK = NO;
@@ -619,10 +374,11 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Debug;
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
@@ -636,20 +392,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		74DAFFB5DD48C28E6B57607ACEB580F5 /* Build configuration list for PBXNativeTarget "com_huntmobi_web2app" */ = {
+		9CCCB162D81CCE72DCB894E5FECCE654 /* Build configuration list for PBXNativeTarget "Pods-HM_Demo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A14D9AFF17538EFD223CF5EDB25559E2 /* Debug */,
-				A3C667FFD0A4426C2961D004F552AD86 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		EA36E1501F624AE8E6C37CC2350512CA /* Build configuration list for PBXNativeTarget "Pods-HM_Demo" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C06DBC88453D47D23D11F22A41D92CA3 /* Debug */,
-				2E9496343BC46E46CFAE78AE4AA16CA1 /* Release */,
+				474CC2B61359CC00DA956CA9BD23E486 /* Debug */,
+				C515CA5F122A863E48DDD4DEF0CA7988 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

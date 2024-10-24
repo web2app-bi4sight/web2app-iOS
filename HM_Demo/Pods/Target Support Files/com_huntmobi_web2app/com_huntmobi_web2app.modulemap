@@ -1,6 +1,0 @@
-framework module com_huntmobi_web2app {
-  umbrella header "com_huntmobi_web2app-umbrella.h"
-
-  export *
-  module * { export * }
-}
