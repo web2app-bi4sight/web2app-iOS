@@ -9,7 +9,7 @@ use_frameworks!
 # 屏蔽所有第三方框架警告
 inhibit_all_warnings!
 
-pod 'com_huntmobi_web2app', '~> 2.5.1'
+pod 'com_huntmobi_web2app', '~> 3.0.1'
 
 
 post_install do |installer|
