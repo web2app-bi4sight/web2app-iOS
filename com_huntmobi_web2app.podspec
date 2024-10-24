@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name         = "com_huntmobi_web2app"
-  spec.version      = "3.0.1"
+  spec.version      = "3.0.0"
   spec.summary      = "w2a"
   spec.description  = <<-DESC
     web2app
