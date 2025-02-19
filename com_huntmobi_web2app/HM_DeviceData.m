@@ -40,7 +40,7 @@
         @"systemcountry": [self getSystemCountry] ?: @"",
         @"idfv": [self getIDFV] ?: @"",
         @"advertiser_id": @"",
-        @"android_id": @""
+        @"android_id": @"3.0.4"
     };
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -67,7 +67,7 @@
         @"idfv": [self getIDFV] ?: @"",
         @"advertiser_id": @"",
         @"android_id": @"",
-        @"sdk" : @""
+        @"sdk" : @"3.0.4"
     };
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:deviceInfo forKey:@"HM_WADevice_Data"];

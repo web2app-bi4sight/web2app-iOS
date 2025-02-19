@@ -47,13 +47,15 @@
 - (void)applicationDidBecomeActive:(NSNotification *)notification {
 //    NSLog(@"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
     if (self.isAddRequest) return;
-    [self attibute];
+    [self handleExistingUser];
 }
 
 -(void) attibuteWithAppname: (NSString *)appname {
     self.appname = appname;
     [[HM_DeviceData sharedManager] saveWADeviceInfo];
     NSUserDefaults *userDefaults =[NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:appname forKey:@"HM_AppName"];
+
     NSString *key = @"HM_W2AISFIRSTINSTALL";
     BOOL isFirst = ![userDefaults objectForKey:key] || [userDefaults boolForKey:key];
     if (isFirst) {// 是新用户
@@ -162,13 +164,15 @@
 }
 
 - (void) setUID:(NSString *)UID {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *deviceId = UID;
-    if (deviceId.length > 50) {
-        deviceId = [deviceId substringToIndex:50];
-    } else if (UID.length == 0) {
+    if (deviceId && deviceId.length > 0) {
+        if (deviceId.length > 50) {
+            deviceId = [deviceId substringToIndex:50];
+        }
+    } else {
         deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
     }
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:deviceId forKey:@"__hm_uuid__"];
     [userDefaults synchronize];
 }
@@ -187,7 +191,7 @@
     NSString *dtid = [userDefaults objectForKey:@"HM_WEB2APP_DTID"];
     w2akey = w2akey != nil ? w2akey : @"";
     [mDic setObject:self.cbcString forKey:@"cbc"];
-    if (ua.length > 0) {
+    if (ua && ua.length > 0) {
         [mDic setObject:ua forKey:@"ua"];
     }
     [mDic setObject:timestampAsNumber forKey:@"ts"];
@@ -201,6 +205,7 @@
         w2akey = @"";
     }
     [mDic setObject:w2akey != nil ? w2akey : @"" forKey:@"w2akey"];
+    [mDic setObject:@"1" forKey:@"TestFail"];
     [mDic setObject:[self.atcString isEqualToString:@"add"] ? self.deviceTrackID : (dtid != nil ? dtid : @"") forKey:@"dt_id"];
     return [NSDictionary dictionaryWithDictionary:mDic];
 }
