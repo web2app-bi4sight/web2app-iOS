@@ -196,21 +196,21 @@
                           relativePath:relativePath
                                 params:params
                           successBlock:^(id responseObject) {
-                              if (successBlock) {
-                                  dispatch_async(dispatch_get_main_queue(), ^{
-                                      successBlock(responseObject);
-                                  });
-                              }
-                                [self handleRequestCompletionForIndex:[params objectForKey:@"eid"]];  // 请求完成后移除
-                          }
+            if (successBlock) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    successBlock(responseObject);
+                });
+            }
+            [self handleRequestCompletionForIndex:[params objectForKey:@"eid"]];  // 请求完成后移除
+        }
                              failBlock:^(NSError *error) {
-                                 if (failBlock) {
-                                     dispatch_async(dispatch_get_main_queue(), ^{
-                                         failBlock(error);
-                                     });
-                                 }
-                                [self handleRequestCompletionForIndex:[params objectForKey:@"eid"]];   // 请求失败也移除
-                             }];
+            if (failBlock) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    failBlock(error);
+                });
+            }
+//            [self handleRequestCompletionForIndex:[params objectForKey:@"eid"]];   // 请求失败也移除
+        }];
     }];
     
     [self.requestQueue addOperation:operation];  // 添加请求到队列中
@@ -224,7 +224,17 @@
                     successBlock:(HSResponseSuccessBlock)successBlock
                        failBlock:(HSResponseFailBlock)failBlock
 {
-    if (![relativePath isEqualToString:@"https://cdn.bi4sight.com/w2a/attribute"]) {
+//    if (![relativePath isEqualToString:@"https://cdn.bi4sight.com/w2a/attribute"]) {
+    BOOL isContains = [relativePath containsString:@"w2a/attribute"];
+    BOOL isW2A = false;
+    if ([relativePath containsString:@"https://cdn.bi4sight.com"]) {
+        isW2A = true;
+    } else if ([relativePath containsString:@"https://capi.bi4sight.com"]) {
+        isW2A = true;
+    } else if ([relativePath containsString:@"https://wa.bi4sight.com"]) {
+        isW2A = true;
+    }
+    if (!isContains && isW2A) {
         NSString *w2akey = [params objectForKey:@"w2akey"] ?: @"";
         NSString *w2a_data_encrypt = [params objectForKey:@"w2a_data_encrypt"] ?: @"";
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -235,8 +245,11 @@
                 NSString *click_time = [userDefaults objectForKey:@"HM_CLICK_TIME"];
                 if (![self isTimestampOlderThan48Hours:click_time]) {
 //                    NSLog(@"重新赋值w2akey");
+                    NSString *appname = [userDefaults objectForKey:@"HM_AppName"] ?: @"";
+
                     NSMutableDictionary *mDic = [NSMutableDictionary dictionaryWithDictionary:params];
                     [mDic setObject:HM_W2a_Data forKey:@"w2akey"];
+                    [mDic setObject:appname forKey:@"app_name"];
                     params = [NSDictionary dictionaryWithDictionary:mDic];
                 } else {
                     [self handleRequestCompletionForIndex:[params objectForKey:@"eid"]];  // 超出48小时移除掉
@@ -272,21 +285,34 @@
         if (error) {
             if (failBlock) failBlock(error);
         } else {
-            NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-            if (self.isEnableLog) {
-                NSString *jsonStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[NSDictionary dictionaryWithDictionary:params] options:0 error:nil];
-                NSString *strJson = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-                if (jsonData.length > 0) {
-                    NSDictionary *requestHeaders = request.allHTTPHeaderFields;
-                    NSMutableString *headerString = [NSMutableString stringWithString:@"Request Headers:\n"];
-                    [requestHeaders enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-                        [headerString appendFormat:@"%@: %@\n", key, obj];
-                    }];
-                    HMLog(@"\n**************\n hm_event log \n\nurl:%@\n\n%@\nRequestBody:\n%@\n\nResponse:\n%@\n**************\n\n ", relativePath, headerString, strJson, jsonStr);
+            @try {
+                NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+
+                if (self.isEnableLog) {
+                    NSString *jsonStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params options:0 error:nil];
+                    NSString *requestBodyStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+                    
+                    if (jsonData.length > 0) {
+                        NSDictionary *requestHeaders = request.allHTTPHeaderFields;
+                        NSMutableString *headerString = [NSMutableString stringWithString:@"Request Headers:\n"];
+                        [requestHeaders enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *obj, BOOL *stop) {
+                            [headerString appendFormat:@"%@: %@\n", key, obj];
+                        }];
+                        
+                        HMLog(@"\n**************\n hm_event log \n\nurl:%@\n\n%@\nRequestBody:\n%@\n\nResponse:\n%@\n**************\n\n",
+                              relativePath, headerString, requestBodyStr, jsonStr);
+                    }
                 }
+                if (successBlock) successBlock([self handleResultData:responseObject]);
             }
-            if (successBlock) successBlock([self handleResultData:responseObject]);
+            @catch (NSException *exception) {
+                NSLog(@"Error occurred: %@, %@", exception, [exception userInfo]);
+                if (successBlock) successBlock([self handleResultData:@{}]);
+            }
+            @finally {
+            }
+            
         }
     }];
     

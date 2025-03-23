@@ -32,9 +32,13 @@ NS_ASSUME_NONNULL_BEGIN
 /// 唯一标识，可以是用户的也可以是设备的，不传值默认会用IDFV
 @property (nonatomic, copy) NSString *UID;
 
+@property (nonatomic, copy) NSString *pasteboardString;
+
 + (instancetype)sharedInstance;
 
 -(void) attibuteWithAppname: (NSString *)appname;
+
+-(void) reAttribution;
 
 -(void) eventPostWithEventInfo : (HM_EventInfoModel *) eventInfoModel;
 

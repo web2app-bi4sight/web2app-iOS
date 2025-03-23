@@ -7,6 +7,11 @@
 
 #import "HM_EventDataModel.h"
 
+@interface HM_EventDataModel ()
+@property (nonatomic, strong) NSString *oldEventID;  // 老eventID
+
+@end
+
 @implementation HM_EventDataModel
 
 - (instancetype)init {
@@ -14,6 +19,7 @@
     if (self) {
         self.poid = @"";
         self.eventId = [self getGUID];
+        self.oldEventID = @"";
         self.eventName = @"";
         self.currency = @"";
         self.value = @"";
@@ -26,9 +32,15 @@
 }
 
 - (nonnull NSDictionary *)toDictionary {
+    NSString *eid = @"";
+    if ([self.eventId isEqualToString: self.oldEventID]) {
+        self.eventId = [self getGUID];
+    }
+    self.oldEventID = self.eventId;
+    eid = self.eventId ?: [self getGUID];
     return @{
         @"po_id": self.poid ?: @"",
-        @"event_id": self.eventId ?: [self getGUID],
+        @"event_id": eid,
         @"event_name": self.eventName ?: @"",
         @"currency": self.currency ?: @"",
         @"value": self.value ?: @"",

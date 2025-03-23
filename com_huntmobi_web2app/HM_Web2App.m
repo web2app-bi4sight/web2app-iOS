@@ -34,19 +34,29 @@
         sharedInstance.deviceTrackID = @"";
         sharedInstance.appname = @"";
         sharedInstance.UID = @"";
+        sharedInstance.pasteboardString = @"";
         [[HM_DeviceData sharedManager] saveWADeviceInfo];
-        [[NSNotificationCenter defaultCenter] addObserver:sharedInstance
-                                                     selector:@selector(applicationDidBecomeActive:)
-                                                         name:UIApplicationDidBecomeActiveNotification
-                                                       object:nil];
+//        [[NSNotificationCenter defaultCenter] addObserver:sharedInstance
+//                                                     selector:@selector(applicationDidBecomeActive:)
+//                                                         name:UIApplicationDidBecomeActiveNotification
+//                                                       object:nil];
         
     });
     return sharedInstance;
 }
 
-- (void)applicationDidBecomeActive:(NSNotification *)notification {
-//    NSLog(@"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-    if (self.isAddRequest) return;
+//- (void)applicationDidBecomeActive:(NSNotification *)notification {
+////    NSLog(@"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+//    if (self.isAddRequest) return;
+//    [self handleExistingUser];
+//}
+
+- (void)reAttribution {
+    if (self.isAddRequest) return;//归因中，不需要再次发起归因请求
+    NSUserDefaults *userDefaults =[NSUserDefaults standardUserDefaults];
+    NSString *key = @"HM_W2AISFIRSTINSTALL";
+    BOOL isFirst = ![userDefaults objectForKey:key] || [userDefaults boolForKey:key];
+    if (isFirst) return;// 首次归因前不发起再次归因，避免抢归因
     [self handleExistingUser];
 }
 
@@ -83,22 +93,26 @@
 -(void)handleNewUser {
     // 新用户逻辑处理
     NSString *copyString = @"";
-    if (@available(iOS 10.0, *)) {
-        BOOL isHasString = [[UIPasteboard generalPasteboard] hasStrings];
-        if (isHasString) {
-            copyString = [[UIPasteboard generalPasteboard] string];
-            [UIPasteboard generalPasteboard].string = nil;
-        }
+    if (self.pasteboardString.length > 0) { // 外部传入剪切板数据，不读取剪切板内容
+        copyString = self.pasteboardString;
     } else {
-        copyString = [[UIPasteboard generalPasteboard] string];
+        if (@available(iOS 10.0, *)) {
+            BOOL isHasString = [[UIPasteboard generalPasteboard] hasStrings];
+            if (isHasString) {
+                copyString = [[UIPasteboard generalPasteboard] string];
+                [UIPasteboard generalPasteboard].string = nil;
+            }
+        } else {
+            copyString = [[UIPasteboard generalPasteboard] string];
+        }
     }
-    if (copyString.length > 0) { //剪切板处理
+    //剪切板数据验证
+    if (copyString.length > 0) {
         if([[HM_Config sharedManager] isW2ADataString:copyString]) {//判断剪切板内容是否是web2app的内容
             self.cbcString = copyString;
         }
     }
     self.atcString = @"add";
-//    HMLog(@"111111111111111111111111");
     [self getWebViewInfo];
 }
 
@@ -106,15 +120,15 @@
 -(void)handleExistingUser {
     // 非新用户逻辑处理
     self.atcString = @"launch";
+    self.cbcString = self.pasteboardString;
     [self attibute];
 }
 
-
 //MARK: 归因
 -(void) attibute {
-//    HMLog(@"222222222222222222222222222");
     NSDictionary *dic = [self setRequestInfo];
     self.cbcString = @"";
+    self.pasteboardString = @"";
     [[HM_Event sharedInstance] WAEvent:@"CompleteRegistration" withValues:dic andBlock:^(NSDictionary * _Nonnull responseObject) {
         dispatch_async(dispatch_get_main_queue(), ^{
             self.isAddRequest = false;
@@ -142,7 +156,7 @@
             [self.delegate didReceiveHMData:[NSDictionary dictionaryWithDictionary:mdic]];
         });
     }];
-
+    
 }
 
 -(void) eventPostWithEventInfo : (HM_EventInfoModel *) eventInfoModel {

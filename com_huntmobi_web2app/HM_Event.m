@@ -11,7 +11,13 @@
 #define baseURL @"https://sl.bi4sight.com"
 #define slattibute @"slattibute"
 
+#ifdef DEBUG
 #define baseWAURL @"https://cdn.bi4sight.com"
+//#define baseWAURL @"https://capi.bi4sight.com"
+#else
+#define baseWAURL @"https://cdn.bi4sight.com"
+#endif
+
 #define attribute @"w2a/attribute"
 #define eventpost @"w2a/eventpost"
 #define customerinfo @"w2a/customerinfo"

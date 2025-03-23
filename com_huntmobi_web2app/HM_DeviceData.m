@@ -28,7 +28,7 @@
         @"appver": [self getAppInternalVersion] ?: @"",
         @"osversion": [self getSystemVersion] ?: @"",
         @"model": [self getDeviceModel] ?: @"",
-        @"timezoon": [self getTimeZone] ?: @"",
+        @"timezone": [self getTimeZone] ?: @"",
         @"ss_w": [self getScreenWidth] ?: @"",
         @"ss_h": [self getScreenHeight] ?: @"",
         @"screensize": [self getScreenDensity] ?: @"",
@@ -40,7 +40,7 @@
         @"systemcountry": [self getSystemCountry] ?: @"",
         @"idfv": [self getIDFV] ?: @"",
         @"advertiser_id": @"",
-        @"android_id": @"3.0.4"
+        @"android_id": @""
     };
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -55,7 +55,7 @@
         @"appver": [self getAppInternalVersion] ?: @"",
         @"osversion": [self getSystemVersion] ?: @"",
         @"model": [self getDeviceModel] ?: @"",
-        @"timezoon": [self getTimeZone] ?: @"",
+        @"timezone": [self getTimeZone] ?: @"",
         @"phinfo" : @"iOS",
         @"ss_w": [self getScreenWidth] ?: @"",
         @"ss_h": [self getScreenHeight] ?: @"",
@@ -67,7 +67,7 @@
         @"idfv": [self getIDFV] ?: @"",
         @"advertiser_id": @"",
         @"android_id": @"",
-        @"sdk" : @"3.0.4"
+        @"sdk" : @"3.0.6"
     };
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:deviceInfo forKey:@"HM_WADevice_Data"];

@@ -41,7 +41,7 @@ static W2ABlock w2aBlock;
             } else {
                 copyString = [[UIPasteboard generalPasteboard] string];
             }
-            if (copyString.length > 0) { //剪切板处理
+            if (copyString && copyString.length > 0) { //剪切板处理q
                 if([[HM_Config sharedManager] isW2ADataString:copyString]) {//判断剪切板内容是否是web2app的内容
                     cbcString = copyString;
                 }
@@ -69,7 +69,7 @@ static W2ABlock w2aBlock;
     NSString *dtid = [userDefaults objectForKey:@"HM_WEB2APP_DTID"];
     w2akey = w2akey != nil ? w2akey : @"";
     [mDic setObject:cbcString forKey:@"cbc"];
-    if (ua.length > 0) {
+    if (ua && ua.length > 0) {
         [mDic setObject:ua forKey:@"ua"];
     }
     [mDic setObject:timestampAsNumber forKey:@"ts"];
@@ -149,7 +149,7 @@ static W2ABlock w2aBlock;
     NSString *dtid = [userDefaults objectForKey:@"HM_WEB2APP_DTID"];
     w2akey = w2akey != nil ? w2akey : @"";
     [mDic setObject:cbcString forKey:@"cbc"];
-    if (ua.length > 0) {
+    if (ua && ua.length > 0) {
         [mDic setObject:ua forKey:@"ua"];
     }
     [mDic setObject:timestampAsNumber forKey:@"ts"];
@@ -171,13 +171,15 @@ static W2ABlock w2aBlock;
 }
 
 +(void) SetDeviceID:(NSString *) string{
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *deviceId = string;
-    if (deviceId.length > 50) {
-        deviceId = [deviceId substringToIndex:50];
+    if (string && string.length > 0) {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString *deviceId = string;
+        if (deviceId.length > 50) {
+            deviceId = [deviceId substringToIndex:50];
+        }
+        [userDefaults setObject:deviceId forKey:@"__hm_uuid__"];
+        [userDefaults synchronize];
     }
-    [userDefaults setObject:deviceId forKey:@"__hm_uuid__"];
-    [userDefaults synchronize];
 }
 
 + (void)UserDataUpdateEvent:(NSString *) emStr Fb_login_id : (NSString *) fbStr Phone : (NSString *) phStr Zipcode : (NSString *) zipcodeStr City : (NSString *) cityStr State : (NSString *) stateStr Gender : (NSString *) genderStr Fn : (NSString *) fnStr Ln : (NSString *) lnStr DateBirth : (NSString *) dateBirthStr Country : (NSString *) countryStr success:(nonnull void (^)(void))block {
@@ -235,8 +237,8 @@ static W2ABlock w2aBlock;
     [mDic setObject:appname forKey:@"app_name"];
     [mDic setObject:w2akey != nil ? w2akey : @"" forKey:@"w2akey"];
     [mDic setObject:[hm getGUID] forKey:@"eid"];
-    [mDic setObject:@(1) forKey:@"is_event"];
-    [mDic setObject:@(0) forKey:@"is_delay"];
+    [mDic setObject:@(YES) forKey:@"is_event"];
+    [mDic setObject:@(NO) forKey:@"is_delay"];
 
     [[HM_Event sharedInstance] WAEvent:@"EventPost" withValues:[NSDictionary dictionaryWithDictionary:mDic] andBlock:^(NSDictionary * _Nonnull responseObject) {
         
@@ -269,8 +271,8 @@ static W2ABlock w2aBlock;
     [mDic setObject:appname forKey:@"app_name"];
     [mDic setObject:w2akey != nil ? w2akey : @"" forKey:@"w2akey"];
     [mDic setObject:[hm getGUID] forKey:@"eid"];
-    [mDic setObject:@(0) forKey:@"is_event"];
-    [mDic setObject:@(0) forKey:@"is_delay"];
+    [mDic setObject:@(NO) forKey:@"is_event"];
+    [mDic setObject:@(NO) forKey:@"is_delay"];
 
     [[HM_Event sharedInstance] WAEvent:@"EventPost" withValues:[NSDictionary dictionaryWithDictionary:mDic] andBlock:^(NSDictionary * _Nonnull responseObject) {
         
@@ -301,8 +303,8 @@ static W2ABlock w2aBlock;
     [mDic setObject:appname forKey:@"app_name"];
     [mDic setObject:w2akey != nil ? w2akey : @"" forKey:@"w2akey"];
     [mDic setObject:[hm getGUID] forKey:@"eid"];
-    [mDic setObject:@(0) forKey:@"is_event"];
-    [mDic setObject:@(0) forKey:@"is_delay"];
+    [mDic setObject:@(NO) forKey:@"is_event"];
+    [mDic setObject:@(NO) forKey:@"is_delay"];
 
     [[HM_Event sharedInstance] WAEvent:@"EventPost" withValues:[NSDictionary dictionaryWithDictionary:mDic] andBlock:^(NSDictionary * _Nonnull responseObject) {
         

@@ -50,6 +50,7 @@
     NSString *key = @"HM_ISFIRSTINSTALL";
     BOOL isFirst = ![userDefaults objectForKey:key] || [userDefaults boolForKey:key];
     if (isFirst) {// 是新用户
+        if (self.isAddRequest) return;
         self.isAddRequest = true;
         [userDefaults setBool:NO forKey:key];
         [userDefaults setObject:self.codeString forKey:@"HM_SMARTLINK_SCODE"];
