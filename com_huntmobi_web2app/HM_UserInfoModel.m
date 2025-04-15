@@ -1,8 +1,8 @@
 //
 //  HM_UserInfoModel.m
-//  HT_Test
+//  HM
 //
-//  Created by HM on 2024/09/26.
+//  Created by HM on 2025/04/01.
 //
 
 #import "HM_UserInfoModel.h"
@@ -42,6 +42,34 @@
         @"ln": self.lastName ?: @"",
         @"db": self.birthday ?: @"",
     };
+}
+
+
+//facebookLoginId    Facebook 登录 ID
+//Email    电子邮件地址
+//Phone    电话号码
+//PostalCode    邮政编码
+//City    城市
+//State    州/省
+//Gender    性别
+//FirstName    名字
+//LastName    姓氏
+//DateBirth    出生日期
+//Country    国家
+- (nonnull NSArray *)toArray {
+    return @[
+        self.fbLoginId ?: @"",
+        self.email ?: @"",
+        self.phone ?: @"",
+        self.zipCode ?: @"",
+        self.city ?: @"",
+        self.state ?: @"",
+        self.gender ?: @"",
+        self.firstName ?: @"",
+        self.lastName ?: @"",
+        self.birthday ?: @"",
+        self.country ?: @""
+    ];
 }
 
 @end

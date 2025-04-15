@@ -1,259 +1,278 @@
 //
-//  HM_Web2app.m
-//  HT_Test
+//  HM_Web2App.m
+//  HM
 //
-//  Created by HM on 2024/09/03.
+//  Created by HM on 2025/04/01.
 //
 
 #import "HM_Web2App.h"
-#import "HM_NetWork.h"
+#import "HM_UserAgentUtil.h"
 #import "HM_Config.h"
+#import "HM_NetWork.h"
 #import "HM_Event.h"
-#import "HM_WebView.h"
 #import "HM_DeviceData.h"
 
 @interface HM_Web2App ()
 
-@property (nonatomic, copy) NSString *atcString;
 @property (nonatomic, copy) NSString *cbcString;
-@property (nonatomic, assign) BOOL isAddRequest;
-@property (nonatomic, copy) NSString *appname;
+//@property (nonatomic, copy) NSString *appname;
+@property (nonatomic, copy) NSString *UAString;
+@property (nonatomic, copy) NSString *fromString;
 
 @end
 
 @implementation HM_Web2App
 
 + (instancetype)sharedInstance {
-    static HM_Web2App *sharedInstance = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[self alloc] init];
-        sharedInstance.isAddRequest = false;
-        sharedInstance.cbcString = @"";
-        sharedInstance.atcString = @"";
-        sharedInstance.deviceTrackID = @"";
-        sharedInstance.appname = @"";
-        sharedInstance.UID = @"";
-        sharedInstance.pasteboardString = @"";
-        [[HM_DeviceData sharedManager] saveWADeviceInfo];
-//        [[NSNotificationCenter defaultCenter] addObserver:sharedInstance
-//                                                     selector:@selector(applicationDidBecomeActive:)
-//                                                         name:UIApplicationDidBecomeActiveNotification
-//                                                       object:nil];
-        
-    });
-    return sharedInstance;
-}
-
-//- (void)applicationDidBecomeActive:(NSNotification *)notification {
-////    NSLog(@"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-//    if (self.isAddRequest) return;
-//    [self handleExistingUser];
-//}
-
-- (void)reAttribution {
-    if (self.isAddRequest) return;//归因中，不需要再次发起归因请求
-    NSUserDefaults *userDefaults =[NSUserDefaults standardUserDefaults];
-    NSString *key = @"HM_W2AISFIRSTINSTALL";
-    BOOL isFirst = ![userDefaults objectForKey:key] || [userDefaults boolForKey:key];
-    if (isFirst) return;// 首次归因前不发起再次归因，避免抢归因
-    [self handleExistingUser];
+     static HM_Web2App *sharedInstance = nil;
+     static dispatch_once_t onceToken;
+     dispatch_once(&onceToken, ^{
+          sharedInstance = [[self alloc] init];
+          sharedInstance.cbcString = @"";
+          sharedInstance.deviceTrackID = @"";
+          sharedInstance.appname = @"";
+          sharedInstance.UID = @"";
+          sharedInstance.pasteboardString = @"";
+          sharedInstance.fromString = @"";
+     });
+     return sharedInstance;
 }
 
 -(void) attibuteWithAppname: (NSString *)appname {
-    self.appname = appname;
-    [[HM_DeviceData sharedManager] saveWADeviceInfo];
-    NSUserDefaults *userDefaults =[NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:appname forKey:@"HM_AppName"];
-
-    NSString *key = @"HM_W2AISFIRSTINSTALL";
-    BOOL isFirst = ![userDefaults objectForKey:key] || [userDefaults boolForKey:key];
-    if (isFirst) {// 是新用户
-        self.isAddRequest = true;
-        [userDefaults setBool:NO forKey:key];
-            [self handleNewUser];
-    } else {
-        if (self.isAddRequest) return;
-        self.isAddRequest = true;
-        [self handleExistingUser];
-    }
+     self.appname = appname;
+     NSUserDefaults *userDefaults =[NSUserDefaults standardUserDefaults];
+     [userDefaults setObject:appname forKey:@"HM_AppName"];
+     [self session];// 日活
+     NSString *key = @"HM_W2AISFIRSTINSTALL";
+     BOOL isFirst = ![userDefaults objectForKey:key] || [userDefaults boolForKey:key];
+     if (isFirst) {// 是新用户
+          [userDefaults setBool:NO forKey:key];
+          [self getWebviewUA];
+     } else {//非新增用户，正常启动不做处理
+          self.pasteboardString = @"";
+     }
 }
 
-//MARK: 获取网关指纹
--(void) getWebViewInfo {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[HM_WebView shared] HMWebUABlock:^(NSString * _Nonnull uaString) {
-            [self attibute];
-        }];
-        [[HM_WebView shared] creatSLWebView];
-    });
+//MARK: 非新装逻辑——通过deeplink启动
+- (void)continueUserActivity:(NSUserActivity * _Nullable)userActivity {
+     if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
+          NSURL *url = userActivity.webpageURL;
+          if (url) {
+               NSString *s = url.absoluteString;
+               if([[HM_Config sharedManager] isW2ADataString:url.absoluteString]) {
+                    self.fromString = url.absoluteString;
+               }
+          }
+     }
+     NSUserDefaults *userDefaults =[NSUserDefaults standardUserDefaults];
+     NSString *key = @"HM_W2AISFIRSTINSTALL";
+     BOOL isFirst = ![userDefaults objectForKey:key] || [userDefaults boolForKey:key];
+     if (isFirst) {// 首次打开判断有没APPname，没有不做归因
+          if (self.appname.length > 0) {
+               [userDefaults setBool:NO forKey:key];
+               [userDefaults setObject:self.appname forKey:@"HM_AppName"];
+               [self getWebviewUA];
+          }
+     } else {
+          if (self.pasteboardString.length > 0) {// app向SDK传入剪切板的值
+               if([[HM_Config sharedManager] isW2ADataString:self.pasteboardString]) {
+                    self.cbcString = self.pasteboardString;
+                    self.pasteboardString = @"";
+               }
+               if (self.fromString.length > 0 || self.cbcString.length > 0) {
+                    [self launch];
+               }
+          } else if (self.isLaunchReadCut) {// app没传剪切板的值，但是需要SDK读取一次
+               [self checkClipboardForURLWithCompletion:^(NSString *urlString) {
+                    if([[HM_Config sharedManager] isW2ADataString:urlString]) {
+                         self.cbcString = urlString;
+                         [UIPasteboard generalPasteboard].string = nil;
+                    }
+                    if (self.fromString.length > 0 || self.cbcString.length > 0) {
+                         [self launch];
+                    }
+               }];
+          } else {// 不需要再次获取剪切板的值
+               self.cbcString = @"";
+               if (self.fromString.length > 0) {
+                    [self launch];
+               }
+          }
+     }
+}
+
+-(void)getWebviewUA{
+     [HM_UserAgentUtil getUserAgentWithCompletion:^(NSString * _Nonnull userAgent) {
+          self.UAString = userAgent;
+          [self handleNewUser];
+     }];
 }
 
 //MARK: 新装逻辑
 -(void)handleNewUser {
-    // 新用户逻辑处理
-    NSString *copyString = @"";
-    if (self.pasteboardString.length > 0) { // 外部传入剪切板数据，不读取剪切板内容
-        copyString = self.pasteboardString;
-    } else {
-        if (@available(iOS 10.0, *)) {
-            BOOL isHasString = [[UIPasteboard generalPasteboard] hasStrings];
-            if (isHasString) {
-                copyString = [[UIPasteboard generalPasteboard] string];
-                [UIPasteboard generalPasteboard].string = nil;
-            }
-        } else {
-            copyString = [[UIPasteboard generalPasteboard] string];
-        }
-    }
-    //剪切板数据验证
-    if (copyString.length > 0) {
-        if([[HM_Config sharedManager] isW2ADataString:copyString]) {//判断剪切板内容是否是web2app的内容
-            self.cbcString = copyString;
-        }
-    }
-    self.atcString = @"add";
-    [self getWebViewInfo];
+     // 新用户逻辑处理
+     NSString *copyString = @"";
+     if (self.pasteboardString.length > 0) {// 外部传入剪切板数据，不读取剪切板内容
+          copyString = self.pasteboardString;
+          self.pasteboardString = @"";
+     } else {//读剪切板
+          if (@available(iOS 10.0, *)) {
+               BOOL isHasString = [[UIPasteboard generalPasteboard] hasStrings];
+               if (isHasString) {
+                    copyString = [[UIPasteboard generalPasteboard] string];
+                    [UIPasteboard generalPasteboard].string = nil;
+               }
+          } else {
+               copyString = [[UIPasteboard generalPasteboard] string];
+          }
+     }
+     if (copyString.length > 0) {
+          if([[HM_Config sharedManager] isW2ADataString:copyString]) {//判断剪切板内容是否是web2app的内容
+               self.cbcString = copyString;
+          }
+     }
+     [self attibute];
 }
 
-//MARK: 非新装逻辑
--(void)handleExistingUser {
-    // 非新用户逻辑处理
-    self.atcString = @"launch";
-    self.cbcString = self.pasteboardString;
-    [self attibute];
-}
-
-//MARK: 归因
+//MARK: 首次归因
 -(void) attibute {
-    NSDictionary *dic = [self setRequestInfo];
-    self.cbcString = @"";
-    self.pasteboardString = @"";
-    [[HM_Event sharedInstance] WAEvent:@"CompleteRegistration" withValues:dic andBlock:^(NSDictionary * _Nonnull responseObject) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.isAddRequest = false;
-            NSString *code = [responseObject[@"code"] stringValue];
-            NSDictionary *data = responseObject[@"data"] ?: @{};
-            if ([code isEqual: @"0"]) {
-                NSString *w2akey = [data objectForKey:@"w2akey"];
-                NSString *dtid = [data objectForKey:@"dtid"] ?: @"";
-                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                if (w2akey != nil && w2akey.length > 0) {
-                    [userDefaults setObject:w2akey forKey:@"HM_W2a_Data"];
-                    [userDefaults setObject:dtid forKey:@"HM_WEB2APP_DTID"];
-                    NSString *click_time = [data objectForKey:@"click_time"];
-                    [userDefaults setObject:click_time forKey:@"HM_CLICK_TIME"];
-                }
-                [userDefaults synchronize];
-            }
-            NSMutableDictionary *mdic = [NSMutableDictionary dictionaryWithDictionary:data];
-            NSString *w2akey = [data objectForKey:@"w2akey"] ?: @"";
-            BOOL value = NO;
-            if (w2akey.length > 0) {
-                value = YES;
-            }
-            [mdic setObject:[NSNumber numberWithBool:value] forKey:@"isAttribution"];
-            [self.delegate didReceiveHMData:[NSDictionary dictionaryWithDictionary:mdic]];
-        });
-    }];
-    
+     NSDictionary *dic = [self setAttibuteRequestInfo];
+     self.cbcString = @"";
+     self.pasteboardString = @"";
+     self.fromString = @"";
+     __weak typeof(self) weakSelf = self;
+     [[HM_Event sharedInstance] event:@"CompleteRegistration" withValues:dic andBlock:^(NSDictionary * _Nonnull responseObject) {
+          dispatch_async(dispatch_get_main_queue(), ^{
+               [weakSelf callbackData:responseObject];
+          });
+     }];
 }
 
+//MARK: 再归因
+-(void) launch {
+     NSDictionary *dic = [self setRequestInfo:@[self.cbcString, self.fromString]];
+     self.cbcString = @"";
+     self.fromString = @"";
+     self.pasteboardString = @"";
+     __weak typeof(self) weakSelf = self;
+     [[HM_Event sharedInstance] event:@"Launch" withValues:dic andBlock:^(NSDictionary * _Nonnull responseObject) {
+          dispatch_async(dispatch_get_main_queue(), ^{
+               [weakSelf callbackData:responseObject];
+          });
+     }];
+}
+
+//MARK: 留存
+-(void) session {
+     if ([[HM_Config sharedManager] shouldReportTodayAndUpdate]) {//每天只报1次，UTC0时区
+          NSDictionary *dic = [self setRequestInfo:@[]];
+          [[HM_Event sharedInstance] event:@"OnSession" withValues:dic andBlock:^(NSDictionary * _Nonnull responseObject) {
+               
+          }];
+     }
+}
+
+//MARK: 上报设备信息
+-(void) uploadDeviceInfo {
+     NSDictionary *dic = [self setRequestInfo:[[HM_DeviceData sharedManager] getDeviceInfoWithArray]];
+     [[HM_Event sharedInstance] event:@"UploadDeviceInfo" withValues:dic andBlock:^(NSDictionary * _Nonnull responseObject) {
+          
+     }];
+}
+
+//MARK: 上报事件
 -(void) eventPostWithEventInfo : (HM_EventInfoModel *) eventInfoModel {
-    NSDictionary *data = [self setEventRequestInfo:[eventInfoModel toDictionary]];
-    [[HM_Event sharedInstance] WAEvent:@"EventPost" withValues:data andBlock:^(NSDictionary * _Nonnull responseObject) {
-        
-    }];
+     NSDictionary *data = [self setRequestInfo:[eventInfoModel toArray]];
+     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:data];
+     [dic setObject:eventInfoModel.eventData.eventName forKey:@"event_name"];
+     [[HM_Event sharedInstance] event:eventInfoModel.eventData.eventName withValues:[NSDictionary dictionaryWithDictionary:dic] andBlock:^(NSDictionary * _Nonnull responseObject) {
+          
+     }];
 }
 
+//MARK: 上报用户信息
 -(void) updateUserInfo : (HM_UserInfoModel *) userInfoModel {
-    NSDictionary *data = [self setUserRequestInfo:[userInfoModel toDictionary]];
-    [[HM_Event sharedInstance] WAEvent:@"UpDateUserInfo" withValues:data andBlock:^(NSDictionary * _Nonnull responseObject) {
-        
-    }];
+     NSDictionary *data = [self setRequestInfo:[userInfoModel toArray]];
+     [[HM_Event sharedInstance] event:@"UpDateUserInfo" withValues:data andBlock:^(NSDictionary * _Nonnull responseObject) {
+          
+     }];
 }
 
--(void) setLogEnabled:(BOOL)isEnable {
-    [[HM_NetWork shareInstance] setLogEnabled:isEnable];
+//MARK: 返回归因数据给app
+-(void) callbackData : (NSDictionary *)responseObject {
+     NSString *code = [responseObject[@"code"] stringValue];
+     NSDictionary *data = responseObject[@"data"] ?: @{};
+     if ([code isEqual: @"0"]) {
+          NSString *w2akey = [data objectForKey:@"w2akey"] ?: @"";
+          NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+          NSString *localW2akey = [userDefaults objectForKey:@"w2akey"] ?: @"";
+          if (w2akey.length > 0 && ![localW2akey isEqualToString:w2akey]) {
+               [userDefaults setObject:w2akey forKey:@"HM_W2a_Data"];
+               NSString *click_time = [data objectForKey:@"click_time"];
+               [userDefaults setObject:click_time forKey:@"HM_CLICK_TIME"];
+               [userDefaults synchronize];
+               [self uploadDeviceInfo];
+          }
+     }
+     [self.delegate didReceiveHMData:[NSDictionary dictionaryWithDictionary:data]];
 }
 
 - (void) setUID:(NSString *)UID {
-    NSString *deviceId = UID;
-    if (deviceId && deviceId.length > 0) {
-        if (deviceId.length > 50) {
-            deviceId = [deviceId substringToIndex:50];
-        }
-    } else {
-        deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-    }
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:deviceId forKey:@"__hm_uuid__"];
-    [userDefaults synchronize];
+     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+     [userDefaults setObject: UID.length > 0 ? UID : @"" forKey:@"__hm_uuid__"];
+     [userDefaults synchronize];
 }
 
-- (NSDictionary *)setRequestInfo {
-    NSMutableDictionary *mDic = [NSMutableDictionary dictionary];
-    NSUserDefaults *userDefaults =[NSUserDefaults standardUserDefaults];
-    NSString *ua = [userDefaults objectForKey:@"HM_WebView_UA"];
-    NSTimeInterval currentTimestamp = [[NSDate date] timeIntervalSince1970];
-    long timestampAsLong = (long)currentTimestamp;
-    NSNumber *timestampAsNumber = [NSNumber numberWithLong:timestampAsLong];
-
-    NSString *guid = [[HM_Config sharedManager] getGUID];
-    NSDictionary *device_info = [userDefaults objectForKey:@"HM_WADevice_Data"];
-    NSString *w2akey = [userDefaults objectForKey:@"HM_W2a_Data"];
-    NSString *dtid = [userDefaults objectForKey:@"HM_WEB2APP_DTID"];
-    w2akey = w2akey != nil ? w2akey : @"";
-    [mDic setObject:self.cbcString forKey:@"cbc"];
-    if (ua && ua.length > 0) {
-        [mDic setObject:ua forKey:@"ua"];
-    }
-    [mDic setObject:timestampAsNumber forKey:@"ts"];
-    [mDic setObject:self.atcString forKey:@"option"];
-    [mDic setObject:device_info forKey:@"device"];
-    [mDic setObject:guid forKey:@"eid"];
-    [mDic setObject:@"attribute" forKey:@"action"];
-    [mDic setObject:self.appname forKey:@"app_name"];
-    if (![[HM_Config sharedManager] isW2AKeyString:w2akey]) {
-        [mDic setObject:w2akey != nil ? w2akey : @"" forKey:@"w2a_data_encrypt"];
-        w2akey = @"";
-    }
-    [mDic setObject:w2akey != nil ? w2akey : @"" forKey:@"w2akey"];
-    [mDic setObject:@"1" forKey:@"TestFail"];
-    [mDic setObject:[self.atcString isEqualToString:@"add"] ? self.deviceTrackID : (dtid != nil ? dtid : @"") forKey:@"dt_id"];
-    return [NSDictionary dictionaryWithDictionary:mDic];
+- (void)checkClipboardForURLWithCompletion:(void (^)(NSString *urlString))completion {
+     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+     if (@available(iOS 14.0, *)) {
+          NSSet *patterns = [NSSet setWithObject:UIPasteboardDetectionPatternProbableWebURL];
+          [pasteboard detectPatternsForPatterns:patterns completionHandler:^(NSSet<UIPasteboardDetectionPattern> * _Nullable detectedPatterns, NSError * _Nullable error) {
+               if (error) {
+                    completion(@"");
+                    return;
+               }
+               NSString *urlString = @"";
+               if ([detectedPatterns containsObject:UIPasteboardDetectionPatternProbableWebURL]) {
+                    urlString = pasteboard.string;
+               }
+               completion(urlString);
+          }];
+     } else {
+          completion(@"");
+     }
 }
 
--(NSDictionary *) setEventRequestInfo : (NSDictionary *) dic {
-    NSMutableDictionary *mDic = [NSMutableDictionary dictionaryWithDictionary:dic];
-    NSUserDefaults *userDefaults =[NSUserDefaults standardUserDefaults];
-    NSDictionary *device_info = [userDefaults objectForKey:@"HM_WADevice_Data"];
-    NSString *w2akey = [userDefaults objectForKey:@"HM_W2a_Data"];
-
-    [mDic setObject:device_info forKey:@"device"];
-    [mDic setObject:self.appname forKey:@"app_name"];
-    [mDic setObject:w2akey != nil ? w2akey : @"" forKey:@"w2akey"];
-    [mDic setObject:[self getGUID] forKey:@"eid"];
-    return [NSDictionary dictionaryWithDictionary:mDic];
+-(void) setLogEnabled:(BOOL)isEnable{
+     [[HM_Config sharedManager] setLogEnabled:isEnable];
 }
 
--(NSDictionary *) setUserRequestInfo : (NSDictionary *) dic {
-    NSMutableDictionary *mDic = [NSMutableDictionary dictionaryWithDictionary:dic];
-    NSUserDefaults *userDefaults =[NSUserDefaults standardUserDefaults];
-    NSDictionary *device_info = [userDefaults objectForKey:@"HM_WADevice_Data"];
-    NSString *w2akey = [userDefaults objectForKey:@"HM_W2a_Data"];
-
-    [mDic setObject:device_info forKey:@"device"];
-    [mDic setObject:self.appname forKey:@"app_name"];
-    [mDic setObject:w2akey != nil ? w2akey : @"" forKey:@"w2akey"];
-    [mDic setObject:[self getGUID] forKey:@"eid"];
-    return [NSDictionary dictionaryWithDictionary:mDic];
+//MARK: 数据处理
+- (NSDictionary *)setAttibuteRequestInfo {// 首次归因参数
+     NSMutableDictionary *mDic = [NSMutableDictionary dictionary];
+     NSUserDefaults *userDefaults =[NSUserDefaults standardUserDefaults];
+     NSString *eid = [[HM_Config sharedManager] getGUID];
+     NSString *an = [userDefaults stringForKey:@"HM_AppName"] ?: self.appname;
+     NSString *ua = self.UAString ?: @"";
+     NSString *dtid = [userDefaults objectForKey:@"HM_WEB2APP_DTID"] ?: self.deviceTrackID;
+     NSArray *array = @[eid, an, self.cbcString, ua, dtid, self.fromString];
+     [mDic setObject:eid forKey:@"eid"];
+     [mDic setObject:array forKey:@"dataArray"];
+     return [NSDictionary dictionaryWithDictionary:mDic];
 }
 
--(NSString *)getGUID{
-    NSUUID *uuid = [NSUUID UUID];
-    NSString *uuidString = [uuid UUIDString];
-    return uuidString;
+-(NSDictionary *) setRequestInfo : (NSArray *) array {
+     NSMutableDictionary *mDic = [NSMutableDictionary dictionary];
+     NSUserDefaults *userDefaults =[NSUserDefaults standardUserDefaults];
+     NSString *eid = [[HM_Config sharedManager] getGUID];
+     NSString *an = [userDefaults stringForKey:@"HM_AppName"] ?: self.appname;
+     NSString *w2akey = [userDefaults objectForKey:@"HM_W2a_Data"] ?: @"";
+     NSMutableArray *mArr = [NSMutableArray arrayWithArray:@[eid, an, w2akey]];
+     [mArr addObjectsFromArray:array];
+     [mDic setObject:eid forKey:@"eid"];
+     [mDic setObject:mArr forKey:@"dataArray"];
+     return [NSDictionary dictionaryWithDictionary:mDic];
 }
 
 @end
+

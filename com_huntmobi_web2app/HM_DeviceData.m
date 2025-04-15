@@ -1,14 +1,15 @@
 //
 //  HM_DeviceData.m
-//  web2app
+//  HM
 //
-//  Created by HM on 2024/07/26.
+//  Created by HM on 2025/04/01.
 //
 
 #import "HM_DeviceData.h"
 #import <sys/utsname.h>
 #import <UIKit/UIKit.h>
 #import <SystemConfiguration/SystemConfiguration.h>
+#import "HM_Config.h"
 
 @implementation HM_DeviceData
 
@@ -21,34 +22,7 @@
     return config;
 }
 
-- (void)saveDeviceInfo {
-    NSDictionary *deviceInfo = @{
-        @"pgname": [self getAppBundleName] ?: @"",
-        @"appversion": [self getAppExternalVersion] ?: @"",
-        @"appver": [self getAppInternalVersion] ?: @"",
-        @"osversion": [self getSystemVersion] ?: @"",
-        @"model": [self getDeviceModel] ?: @"",
-        @"timezone": [self getTimeZone] ?: @"",
-        @"ss_w": [self getScreenWidth] ?: @"",
-        @"ss_h": [self getScreenHeight] ?: @"",
-        @"screensize": [self getScreenDensity] ?: @"",
-        @"cpu": [self getCpuCoreCount] ?: @"",
-        @"manufacturername": [self getManufacturer] ?: @"Apple",
-        @"networkconnectionstatus": @"",
-        @"networktype": @"",
-        @"systemlanguage": [self getSystemLanguage] ?: @"",
-        @"systemcountry": [self getSystemCountry] ?: @"",
-        @"idfv": [self getIDFV] ?: @"",
-        @"advertiser_id": @"",
-        @"android_id": @""
-    };
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:deviceInfo forKey:@"HM_Device_Data"];
-    [userDefaults synchronize];
-}
-
-- (void) saveWADeviceInfo {
+- (NSDictionary *) getDeviceInofWithDictionary {
     NSDictionary *deviceInfo = @{
         @"pgname": [self getAppBundleName] ?: @"",
         @"appversion": [self getAppExternalVersion] ?: @"",
@@ -65,13 +39,54 @@
         @"language": [self getSystemLanguage] ?: @"",
         @"systemcountry": [self getSystemCountry] ?: @"",
         @"idfv": [self getIDFV] ?: @"",
+        @"idfa": @"",
         @"advertiser_id": @"",
         @"android_id": @"",
-        @"sdk" : @"3.0.6"
+        @"sdk" : [[HM_Config sharedManager] getSDKVer]
     };
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:deviceInfo forKey:@"HM_WADevice_Data"];
-    [userDefaults synchronize];
+    return deviceInfo;
+}
+
+//brand    手机品牌
+//model    手机型号
+//language    使用语言
+//phinfo    手机操作系统类别 (如 IOS/ANDROID)
+//osversion    操作系统版本
+//screensize    手机屏幕分辨率
+//ss_h    屏幕高度 (数字)
+//ss_w    屏幕宽度 (数字)
+//timezone    时区
+//cpu    CPU 核心数量 (数字)
+//pgname    包名
+//sdk    工具包版本
+//Android_ID    Android 标记
+//Advertiser_ID    广告商 ID
+//IDFV    iOS 标记 (ID for Vendor)
+//IDFA    iOS 标记 (ID for Advertiser)
+//appversion    App 包版本
+//systemcountry    系统国家
+- (NSArray *) getDeviceInfoWithArray {
+    NSArray *array = @[
+        [self getManufacturer] ?: @"Apple",
+        [self getDeviceModel] ?: @"",
+        [self getSystemLanguage] ?: @"",
+        @"iOS",
+        [self getSystemVersion] ?: @"",
+        [self getScreenDensity] ?: @"",
+        [self getScreenHeight] ?: @"",
+        [self getScreenWidth] ?: @"",
+        [self getTimeZone] ?: @"",
+        [self getCpuCoreCount] ?: @"",
+        [self getAppBundleName] ?: @"",
+        [[HM_Config sharedManager] getSDKVer],
+        @"",
+        @"",
+        [self getIDFV] ?: @"",
+        @"",
+        [self getAppExternalVersion] ?: @"",
+        [self getSystemCountry] ?: @""
+    ];
+    return array;
 }
 
 - (NSString *)getAppBundleName {

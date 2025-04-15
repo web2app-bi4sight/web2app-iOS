@@ -2,11 +2,10 @@
 //  HM_Config.h
 //  HM
 //
-//  Created by CCC on 2022/12/2.
+//  Created by HM on 2025/04/01.
 //
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 
 #ifdef DEBUG
 #define HMLog(format, ...) \
@@ -38,28 +37,22 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(instancetype) sharedManager;
 
--(void) saveDeviceID;
+-(BOOL) isW2ADataString : (NSString *)inputString;
 
--(void) saveBaseInfo;
+-(NSString *) getGUID;
 
-- (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString;
+-(NSString *) getTimestamp;
 
-- (CGFloat) returnSDKVersion;
+-(NSNumber *) getTimestampNumber;
 
-- (NSString *)currentUTCTimestamp;
+-(NSString *)optimizedEscapePipeInString : (NSString *)inputString;
 
--(NSString *)getGUID;
+- (BOOL)shouldReportTodayAndUpdate;
 
-- (BOOL) isNewUser;
+-(void) setLogEnabled:(BOOL)isEnable;
 
-- (NSDictionary *)getWebFingerprint;
+-(NSString *)getSDKVer;
 
-- (NSArray<NSString *> *)matchesInString:(NSString *)input;
-
-- (BOOL)isW2ADataString:(NSString *)inputString;
-
-- (BOOL)isW2AKeyString:(NSString *)inputString;
-    
 @end
 
 NS_ASSUME_NONNULL_END

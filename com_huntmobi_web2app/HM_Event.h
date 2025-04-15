@@ -1,8 +1,8 @@
 //
 //  HM_Event.h
-//  web2app
+//  HM
 //
-//  Created by HM on 2024/07/11.
+//  Created by HM on 2025/04/01.
 //
 
 #import <Foundation/Foundation.h>
@@ -14,9 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)sharedInstance;
 
 - (void)event:(NSString *)eventName withValues:(NSDictionary * _Nullable)values andBlock : (void(^)(NSDictionary * responseObject))block ;
-
-- (void)WAEvent:(NSString *)eventName withValues:(NSDictionary * _Nullable)values andBlock : (void(^)(NSDictionary * responseObject))block ;
-
 
 @end
 

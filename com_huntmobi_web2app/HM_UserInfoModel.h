@@ -1,8 +1,8 @@
 //
 //  HM_UserInfoModel.h
-//  HT_Test
+//  HM
 //
-//  Created by HM on 2024/09/26.
+//  Created by HM on 2025/04/01.
 //
 
 #import <Foundation/Foundation.h>
@@ -67,8 +67,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *birthday;
 
 
-
 - (nonnull NSDictionary *)toDictionary;
+
+- (nonnull NSArray *)toArray;
+
 
 @end
 

@@ -1,14 +1,14 @@
 //
 //  HM_EventDataModel.m
-//  HT_Test
+//  HM
 //
-//  Created by HM on 2024/09/24.
+//  Created by HM on 2025/04/01.
 //
 
 #import "HM_EventDataModel.h"
+#import "HM_Config.h"
 
 @interface HM_EventDataModel ()
-@property (nonatomic, strong) NSString *oldEventID;  // 老eventID
 
 @end
 
@@ -18,48 +18,31 @@
     self = [super init];
     if (self) {
         self.poid = @"";
-        self.eventId = [self getGUID];
-        self.oldEventID = @"";
+        self.eventId = [[HM_Config sharedManager] getGUID];
         self.eventName = @"";
         self.currency = @"";
         self.value = @"";
         self.contentType = @"";
         self.contentIds = @[];
-        [self setTimestamp];
     }
-    
     return self;
 }
 
 - (nonnull NSDictionary *)toDictionary {
-    NSString *eid = @"";
-    if ([self.eventId isEqualToString: self.oldEventID]) {
-        self.eventId = [self getGUID];
-    }
-    self.oldEventID = self.eventId;
-    eid = self.eventId ?: [self getGUID];
+    NSString *eid = self.eventId;
+    NSString *eventTime = self.eventTime;
+    self.eventId = @"";
+    self.eventTime = @"";
     return @{
         @"po_id": self.poid ?: @"",
-        @"event_id": eid,
+        @"event_id": eid.length > 0 ? eid : [[HM_Config sharedManager] getGUID],
         @"event_name": self.eventName ?: @"",
         @"currency": self.currency ?: @"",
         @"value": self.value ?: @"",
         @"content_type": self.contentType ?: @"",
         @"content_ids": self.contentIds ?: @[],
-        @"event_time" : self.eventTime
+        @"event_time" : eventTime.length > 0 ? eventTime : [[HM_Config sharedManager] getTimestamp]
     };
-}
-
-- (void) setTimestamp {
-    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
-    NSString *timeStampString = [NSString stringWithFormat:@"%.0f", timeStamp];
-    self.eventTime = timeStampString;
-}
-
--(NSString *)getGUID{
-    NSUUID *uuid = [NSUUID UUID];
-    NSString *uuidString = [uuid UUIDString];
-    return uuidString;
 }
 
 @end

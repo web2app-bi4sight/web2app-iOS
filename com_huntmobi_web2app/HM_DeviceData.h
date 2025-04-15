@@ -1,22 +1,20 @@
 //
 //  HM_DeviceData.h
-//  web2app
+//  HM
 //
-//  Created by HM on 2024/07/26.
+//  Created by HM on 2025/04/01.
 //
 
 #import <Foundation/Foundation.h>
-
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HM_DeviceData : NSObject
 
 +(instancetype) sharedManager;
 
+- (NSDictionary *) getDeviceInofWithDictionary;
 
--(void) saveDeviceInfo;
-
-- (void) saveWADeviceInfo;
+- (NSArray *) getDeviceInfoWithArray;
 
 @end
 

@@ -1,8 +1,8 @@
 //
 //  HM_EventInfoModel.h
-//  HT_Test
+//  HM
 //
-//  Created by HM on 2024/09/24.
+//  Created by HM on 2025/04/01.
 //
 
 #import <Foundation/Foundation.h>
@@ -28,6 +28,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) HM_EventDataModel *eventData;
 
 - (nonnull NSDictionary *)toDictionary;
+
+- (nonnull NSArray *)toArray;
+
 
 @end
 

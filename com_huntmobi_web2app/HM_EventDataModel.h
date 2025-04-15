@@ -1,8 +1,8 @@
 //
 //  HM_EventDataModel.h
-//  HT_Test
+//  HM
 //
-//  Created by HM on 2024/09/24.
+//  Created by HM on 2025/04/01.
 //
 
 #import <Foundation/Foundation.h>
@@ -53,8 +53,6 @@ NS_ASSUME_NONNULL_BEGIN
  *  事件发生时间戳，取 UTC(0) 时区，秒级时间戳（10位）
  */
 @property (nonatomic, copy) NSString *eventTime;
-
-- (void) setTimestamp;
 
 - (nonnull NSDictionary *)toDictionary;
 
